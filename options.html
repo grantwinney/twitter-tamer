@@ -1,0 +1,131 @@
+<html>
+    <head>
+        <title>Options</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="css/font-awesome-4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="css/options.css" />
+        <script src="js/options.js"></script>
+    </head>
+    <body>
+        <div class="header-parent">
+            <div class="header-child">
+                <span class="header-title">
+                    Distraction Free Twitter
+                </span>
+                <span class="header-menu">
+                    <span class="header-menu-item" id="options-menu-item" style="text-decoration: underline"><a href="javascript:void(0)">Options</a></span>
+                    <span class="header-menu-item" id="support-menu-item"><a href="javascript:void(0)">Support</a></span>
+                </span>
+            </div>
+        </div>
+        <div style="padding-bottom: 50px;">
+            <div id="options" style="display:inline">
+                <div class="pane-title">Options</div>
+                <p>Select the element(s) you'd like to hide. Refresh your Twitter page to see the changes.</p>
+                <hr>
+                <div style="width:600px; margin:0 auto; text-align:left;">
+                    <table>
+                        <tr>
+                            <td style="width:300px">
+                                <ul>
+                                    <li>
+                                        <input type="checkbox" id="hide_nav_bar" title="Navigation Bar">Navigation Bar
+                                        <ul>
+                                            <li><input type="checkbox" id="hide_home_link" title="Hide Home Link"><label id="one">Home Link</label></li>
+                                            <li><input type="checkbox" id="hide_moments" title="Hide Moments">Moments</li>
+                                            <li><input type="checkbox" id="hide_notifications" title="Hide Notifications">Notifications</li>
+                                            <li><input type="checkbox" id="hide_messages" title="Hide Messages">Messages</li>
+                                            <li><input type="checkbox" id="hide_bird_icon" title="Hide Bird">Bird</li>
+                                            <li><input type="checkbox" id="hide_search" title="Hide Search">Search</li>
+                                            <li><input type="checkbox" id="hide_profile_dropdown" title="Hide Profile Dropdown">Profile Dropdown</li>
+                                            <li><input type="checkbox" id="hide_tweet_button" title="Hide Tweet Button">Tweet Button</li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </td>
+                            <td style="width:400px">
+                                <ul>
+                                    <li>
+                                        Sidebars / Misc
+                                        <ul>
+                                            <li><input type="checkbox" id="hide_your_profile_summary" title="Hide Your Profile Summary">Your Profile Summary
+                                                <ul>
+                                                    <li><input type="checkbox" id="hide_your_profile_stats" title="Hide Your Profile Stats">Your Profile Stats</li>
+                                                </ul>
+                                            </li>
+                                            <li><input type="checkbox" id="hide_trend_button" title="Hide Trends">Trends</li>
+                                            <li><input type="checkbox" id="hide_who_to_follow" title="Hide Who to Follow">Who to Follow</li>
+                                            <li><input type="checkbox" id="hide_live_video" title="Hide Live Video">Live Video</li>
+                                            <li><input type="checkbox" id="hide_your_tweet_impressions" title="Hide Tweet Activity">Tweet Activity/Impressions</li>
+                                            <li><input type="checkbox" id="hide_footer" title="Hide Footer">Footer</li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width:400px">
+                                <ul>
+                                    <li><input type="checkbox" id="hide_comments" title="Hide Comments">Comments</li>
+                                </ul>
+                                <ul>
+                                    <li>
+                                        Other's Profile
+                                        <ul>
+                                            <li><input type="checkbox" id="hide_others_profile_header" title="Hide Others' Profile Header">Header</li>
+                                            <li><input type="checkbox" id="hide_others_profile_card" title="Hide Others' Profile Bio">Bio</li>
+                                            <li><input type="checkbox" id="hide_others_profile_navigation" title="Hide Others' Profile Stats">Stats</li>
+                                            <li><input type="checkbox" id="hide_others_profile_userlist" title="Hide Others' Profile Userlist">Userlist<br><span style="font-size:small">(i.e. "1 Follower you know")</span></li>
+                                            <li><input type="checkbox" id="hide_others_photorail" title="Hide Others' Photos/Videos">Photos/Videos</li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </td>
+                            <td style="width:400px">
+                                <ul>
+                                    <li>
+                                        Search Results
+                                        <ul>
+                                            <li><input type="checkbox" id="hide_search_navigation" title="Hide Search Navigation">Search Navigation</li>
+                                            <li><input type="checkbox" id="hide_search_top_news" title="Hide Search Top News">Search Top News</li>
+                                            <li><input type="checkbox" id="hide_search_related_news" title="Hide Search Related News">Search Related News</li>
+                                            <li><input type="checkbox" id="hide_search_filter" title="Hide Search Filter">Search Filter</li>
+                                            <li><input type="checkbox" id="hide_search_user_gallery" title="Hide Search User Gallery">Search User Gallery</li>
+                                            <li><input type="checkbox" id="hide_search_related" title="Hide Search Related">Related Searches</li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div id="support" style="display: none;">
+                <div class="pane-title">Support</div>
+                <p class="pane-subtitle">Questions? Problems?</p>
+                <p class="pane-section">If you have a question or problem, just
+                    <a href="https://github.com/grantwinney/distraction-free-twitter-chrome-extension/issues/new">open a new issue <span class="fa fa-github"></span></a>
+                    and I'll address it as time permits <em>
+                    (or <a href="https://github.com/grantwinney/distraction-free-twitter-chrome-extension/compare">create a pull request <span class="fa fa-github"></span></a> if you have a fix)</em>.</p>
+                <p class="pane-section">If you've been using this extension for awhile and you like it, it'd be great if you could take a moment to <a href="https://chrome.google.com/webstore/detail/distraction-free-twitter/lldkjbgaegfgfidnhokgbnknbdldoabo/reviews">rate it in the store <span class="fa fa-google"></span></a>.
+                <p class="pane-subtitle">Contact Me</p>
+                <p>You can find me on <a href="https://twitter.com/GrantWinney">Twitter <span class="fa fa-twitter"></span></a>,
+                    <a href="https://github.com/grantwinney">GitHub <span class="fa fa-github"></span></a>
+                    and occasionally <a href="https://grantwinney.com/">blogging <span class="fa fa-globe"></span></a>.
+            </div>
+        </div>
+        <div class="footer-parent">
+            <div class="footer-child">
+                <a href="https://chrome.google.com/webstore/detail/distraction-free-twitter/lldkjbgaegfgfidnhokgbnknbdldoabo">Chrome Store</a> |
+                <a href="https://github.com/grantwinney/distraction-free-twitter-chrome-extension/issues/new">Report Issue</a> |
+                <span id="version"></span>
+                <span style="padding-left:5px">|</span>
+                <a href="https://twitter.com/GrantWinney" class="fa fa-twitter fa-lg" aria-hidden="true" title="Twitter" target="_blank"></a>
+                <a href="https://github.com/grantwinney" class="fa fa-github fa-lg" aria-hidden="true" title="GitHub" target="_blank"></a>
+                <a href="https://grantwinney.com/" class="fa fa-globe fa-lg" aria-hidden="true" title="Blog" target="_blank"></a>
+                <a href="https://chrome.google.com/webstore/detail/distraction-free-twitter/lldkjbgaegfgfidnhokgbnknbdldoabo/reviews/" class="fa fa-star fa-lg" aria-hidden="true" title="Leave a Rating" target="_blank"></a>
+            </div>
+        </div>
+    </body>
+</html>

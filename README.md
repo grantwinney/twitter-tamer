@@ -1,2 +1,3 @@
-# distraction-free-twitter-chrome-extension
+# Distraction Free Twitter - a Chrome extension
+
 A Chrome extension to make Twitter more distraction-free.
