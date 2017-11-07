@@ -25,7 +25,7 @@ hr {
     width: 80%;
 }
 
-input[type=checkbox], label {
+input[type=checkbox], input[type=button], label {
     cursor: hand;
 }
 

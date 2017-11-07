@@ -34,20 +34,7 @@
                 "js/twitter.js"
             ],
             "matches": [
-                "https://*.twitter.com/*"
-            ],
-            "exclude_matches": [
-                "https://*.twitter.com/search"
-            ],
-            "run_at": "document_start"
-        },
-        {
-            "js": [
-                "js/arrive.js",
-                "js/twitter.js"
-            ],
-            "matches": [
-                "https://*.twitter.com/search"
+                "*://*.twitter.com/*"
             ],
             "run_at": "document_start"
         }
