@@ -7,7 +7,7 @@ var optionIds = ['hide_nav_bar','hide_your_profile_summary','hide_your_profile_s
 
 function loadOptions() {
     optionIds.forEach(function(id) {
-        chrome.storage.sync.get(id, function(result) {
+        chrome.storage.local.get(id, function(result) {
             document.getElementById(id).checked = (result != undefined && result[id] == true);
         });
     });
@@ -15,13 +15,13 @@ function loadOptions() {
 
 function checkBox(id, select) {
     document.getElementById(id).checked = select;
-    chrome.storage.sync.set({[id]: select});
+    chrome.storage.local.set({[id]: select});
 }
 
 function registerOptionClicks() {
     optionIds.forEach(function(id) {
         document.getElementById(id).addEventListener('click', function() {
-            chrome.storage.sync.set({[id]: document.getElementById(id).checked});
+            chrome.storage.local.set({[id]: document.getElementById(id).checked});
             if (id == 'hide_nav_bar' && document.getElementById(id).checked) {
                 navOptionIds.forEach(function(iid) { checkBox(iid, true) });
             } else if (navOptionIds.includes(id) && document.getElementById('hide_nav_bar').checked) {

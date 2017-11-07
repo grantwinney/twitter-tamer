@@ -34,7 +34,10 @@
                 "js/twitter.js"
             ],
             "matches": [
-                "*://*.twitter.com/*"
+                "https://*.twitter.com/*"
+            ],
+            "exclude_matches": [
+                "https://*.twitter.com/search"
             ],
             "run_at": "document_start"
         },
@@ -44,7 +47,7 @@
                 "js/twitter.js"
             ],
             "matches": [
-                "*://*.asdf.com/*"
+                "https://*.twitter.com/search"
             ],
             "run_at": "document_start"
         }

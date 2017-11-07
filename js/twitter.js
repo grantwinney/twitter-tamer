@@ -13,62 +13,103 @@ function hideElements(elements) {
 }
 
 function possiblyhide(id, action) {
-    chrome.storage.sync.get(id, function(result) {
+    chrome.storage.local.get(id, function(result) {
         if (result != undefined && result[id] == true) {
             action();
         }
     });
 }
 
-function pageload() {
-    chrome.storage.sync.get('hide_nav_bar', function(result) {
-        if (result != undefined && result['hide_nav_bar'] == true) {
-            hideElements(document.getElementsByClassName('global-nav'));
+function handleAllOptions(navOptions, miscOptions) {
+    var currentNavOption = navOptions.pop();
+    chrome.storage.local.get(currentNavOption["key"], function(result) {
+        if (result != undefined && result[currentNavOption["key"]] == true) {
+            hideElements(document.querySelectorAll(currentNavOption["selector"]));
         } else {
-            possiblyhide('hide_home_link', function() {hideElement(document.getElementById('global-nav-home'))});
-            possiblyhide('hide_moments', function() {hideElements(document.getElementsByClassName('moments'))});
-            possiblyhide('hide_notifications', function() {hideElements(document.getElementsByClassName('notifications'))});
-            possiblyhide('hide_messages', function() {hideElements(document.getElementsByClassName('dm-nav'))});
-            possiblyhide('hide_bird_icon', function() {hideElements(document.getElementsByClassName('bird-topbar-etched'))});
-            possiblyhide('hide_search', function() {hideElement(document.getElementById('global-nav-search'))});
-            possiblyhide('hide_profile_dropdown', function() {hideElement(document.getElementById('user-dropdown'))});
-            possiblyhide('hide_tweet_button', function() {hideElements(document.getElementsByClassName('topbar-tweet-btn'))});
+            handleIndividualNavOptions(navOptions, [], function(selectorArray) {
+                handleIndividualOptions(miscOptions, selectorArray, function(selectorArray) {
+                    hideElements(document.querySelectorAll(selectorArray.join(',')));
+                });
+            });
         }
     });
-    possiblyhide('hide_your_profile_summary', function() {hideElements(document.getElementsByClassName('DashboardProfileCard'))});
-    possiblyhide('hide_your_profile_stats', function() {hideElements(document.getElementsByClassName('ProfileCardStats-statList'))});
-    possiblyhide('hide_your_tweet_impressions', function() {hideElements(document.getElementsByClassName('TweetImpressionsModule'))});
-    possiblyhide('hide_others_profile_header', function() {hideElements(document.getElementsByClassName('ProfileCanopy'))});
-    possiblyhide('hide_others_profile_card', function() {hideElements(document.getElementsByClassName('ProfileHeaderCard'))});
-    possiblyhide('hide_others_profile_navigation', function() {hideElements(document.getElementsByClassName('ProfileCanopy-navBar'))});
-    possiblyhide('hide_others_profile_userlist', function() {hideElements(document.getElementsByClassName('ProfileUserList'))});
-    possiblyhide('hide_others_photorail', function() {hideElements(document.querySelectorAll('.PhotoRail-heading, .PhotoRail-mediaBox'))});
-    possiblyhide('hide_trend_button', function() {hideElements(document.getElementsByClassName('Trends'))});
-    possiblyhide('hide_who_to_follow', function() {hideElements(document.getElementsByClassName('wtf-module'))});
-    possiblyhide('hide_live_video', function() {hideElements(document.getElementsByClassName('LiveVideoHomePageModuleContainer'))});
-    possiblyhide('hide_footer', function() {hideElements(document.getElementsByClassName('Footer'))});
-    possiblyhide('hide_search_navigation', function() {hideElements(document.getElementsByClassName('SearchNavigation'))});
-    possiblyhide('hide_search_top_news', function() {hideElements(document.querySelectorAll('.AdaptiveNewsSmallImageHeadline, .AdaptiveNewsLargeImageHeadline'))});
-    possiblyhide('hide_search_related_news', function() {hideElements(document.getElementsByClassName('AdaptiveNewsRelatedHeadlines'))});
-    possiblyhide('hide_search_filter', function() {hideElements(document.getElementsByClassName('SidebarFilterModule'))});
-    possiblyhide('hide_search_related', function() {hideElements(document.getElementsByClassName('AdaptiveRelatedSearches'))});
+}
+
+function handleIndividualNavOptions(navOptions, selectorArray, finalAction) {
+    var currentNavOption = navOptions.pop();
+    chrome.storage.local.get(currentNavOption["key"], function(result) {
+        if (result != undefined && result[currentNavOption["key"]] == true) {
+            selectorArray.push(currentNavOption["selector"]);
+        }
+        if (navOptions.length > 0) {
+            handleIndividualNavOptions(navOptions, selectorArray, finalAction);
+        } else {
+            finalAction(selectorArray);
+        }
+    });
+}
+
+function handleIndividualOptions(options, selectorArray, finalAction) {
+    var currentOption = options.pop();
+    chrome.storage.local.get(currentOption["key"], function(result) {
+        if (result != undefined && result[currentOption["key"]] == true) {
+            selectorArray.push(currentOption["selector"]);
+        }
+        if (options.length > 0) {
+            handleIndividualOptions(options, selectorArray, finalAction);
+        } else {
+            finalAction(selectorArray);
+        }
+    });
+}
+
+function hidePageElements() {
+    var navOptions = [];
+    navOptions.push({key:'hide_home_link', selector:'#global-nav-home'});
+    navOptions.push({key:'hide_moments', selector:'.moments'});
+    navOptions.push({key:'hide_notifications', selector:'.notifications'});
+    navOptions.push({key:'hide_messages', selector:'.dm-nav'});
+    navOptions.push({key:'hide_bird_icon', selector:'.bird-topbar-etched'});
+    navOptions.push({key:'hide_search', selector:'#global-nav-search'});
+    navOptions.push({key:'hide_profile_dropdown', selector:'#user-dropdown'});
+    navOptions.push({key:'hide_tweet_button', selector:'.topbar-tweet-btn'});
+    navOptions.push({key:'hide_nav_bar', selector:'.global-nav'});
+
+    var options = [];
+    options.push({key:'hide_your_profile_summary', selector:'.DashboardProfileCard'});
+    options.push({key:'hide_your_profile_stats', selector:'.ProfileCardStats-statList'});
+    options.push({key:'hide_your_tweet_impressions', selector:'.TweetImpressionsModule'});
+    options.push({key:'hide_others_profile_header', selector:'.ProfileCanopy-header'});
+    options.push({key:'hide_others_profile_card', selector:'.ProfileHeaderCard'});
+    options.push({key:'hide_others_profile_navigation', selector:'.ProfileCanopy-navBar'});
+    options.push({key:'hide_others_profile_userlist', selector:'.ProfileUserList'});
+    options.push({key:'hide_others_photorail', selector:'.PhotoRail-heading, .PhotoRail-mediaBox'});
+    options.push({key:'hide_trend_button', selector:'.Trends'});
+    options.push({key:'hide_who_to_follow', selector:'.wtf-module'});
+    options.push({key:'hide_live_video', selector:'.LiveVideoHomePageModuleContainer'});
+    options.push({key:'hide_footer', selector:'.Footer'});
+    options.push({key:'hide_search_navigation', selector:'.SearchNavigation'});
+    options.push({key:'hide_search_top_news', selector:'.AdaptiveNewsSmallImageHeadline, .AdaptiveNewsLargeImageHeadline'});
+    options.push({key:'hide_search_related_news', selector:'.AdaptiveNewsRelatedHeadlines'});
+    options.push({key:'hide_search_filter', selector:'.SidebarFilterModule'});
+    options.push({key:'hide_search_related', selector:'.AdaptiveRelatedSearches'});
+    options.push({key:'hide_comments', selector:'.inline-reply-tweetbox, .replies-to, .ProfileTweet-action--reply, .Icon--reply'});
+    options.push({key:'hide_search_user_gallery', selector:'.AdaptiveSearchTimeline-separationModule'});
+
+    handleAllOptions(navOptions, options);
+
     possiblyhide('hide_comments', function() {
-        hideElements(document.querySelectorAll('.inline-reply-tweetbox, .replies-to, .ProfileTweet-action--reply, .Icon--reply'))
         document.arrive('.ProfileTweet-action--reply', {onceOnly: true}, function() {
             hideElements(document.querySelectorAll('.ProfileTweet-action--reply'));
         });
     });
-    possiblyhide('hide_search_user_gallery', function() {hideElements(document.getElementsByClassName('AdaptiveSearchTimeline-separationModule'))});
 }
 
 window.addEventListener('DOMContentLoaded', function load(event) {
-    pageload();
+    hidePageElements();
 });
 
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
-    switch(message.event) {
-        case 'pageload':
-            pageload();
-            break;
-    }
+    // message.event == 'pageload'
+    hidePageElements();
 });
