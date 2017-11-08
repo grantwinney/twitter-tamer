@@ -30,7 +30,7 @@ function getMainTimelineOptionsMap() {
 
 function getOthersTimelineOptionsMap() {
     var optionsMap = new Map([...getNavigationBarOptionsMap(), ...getSideBarOptionsMap()]);
-    optionsMap.set('hide_others_profile_header', '.ProfileCanopy-header');
+    optionsMap.set('hide_others_profile_header', '.ProfileCanopy');
     optionsMap.set('hide_others_profile_card', '.ProfileHeaderCard');
     optionsMap.set('hide_others_profile_navigation', '.ProfileCanopy-navBar');
     optionsMap.set('hide_others_profile_userlist', '.ProfileUserList');
@@ -64,13 +64,22 @@ function hideElements(elements) {
     };
 }
 
+function hideWholeNavBar(selectedOptions) {
+    var navBarOptionsMap = getNavigationBarOptionsMap();
+    for (let id of navBarOptionsMap.keys()) {
+        if (!selectedOptions.includes(id)) {
+            return '';
+        }
+    }
+    return ',.global-nav';
+}
+
 function hidePageElements(optionsMap) {
     document.unbindArrive('.ProfileTweet-action--reply');
     chrome.storage.sync.get('options', function(result) {
         if (result != undefined && result.options != undefined) {
-            hideElements(document.querySelectorAll(result.options.filter(id => optionsMap.has(id))
-                                                                 .map((id) => optionsMap.get(id))
-                                                                 .join(',')));
+            var selector = result.options.filter(id => optionsMap.has(id)).map((id) => optionsMap.get(id)).join(',') + hideWholeNavBar(result.options);
+            hideElements(document.querySelectorAll(selector));
             if (result.options['hide_comments'] != undefined) {
                 document.arrive('.ProfileTweet-action--reply', {onceOnly: true}, function() {
                     hideElements(document.querySelectorAll('.ProfileTweet-action--reply'));
@@ -80,10 +89,10 @@ function hidePageElements(optionsMap) {
     });
 }
 
-chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
+function pageRender() {
     // message.event == 'pageload'
-    var url = new URL(location.href);
-    switch(url.pathname) {
+    var urlPath = new URL(location.href).pathname;
+    switch(urlPath) {
         case '/':
             hidePageElements(getMainTimelineOptionsMap());
             break;
@@ -95,11 +104,23 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
             hidePageElements(getSearchHomeOptionsMap());
             break;
         default:
-            /*   /someuser/status/234923492384
-                 /someuser
-                 /i/notifications
-                 /i/moments                      */
-            hidePageElements(getOthersTimelineOptionsMap());
+            if (urlPath.startsWith('/hashtag/')) {
+                hidePageElements(getSearchResultsOptionsMap());
+            } else {
+                /*   /someuser/status/234923492384
+                     /someuser
+                     /i/notifications
+                     /i/moments               */
+                hidePageElements(getOthersTimelineOptionsMap());
+            }
             break;
     }
+}
+
+chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
+    pageRender();
 });
+
+window.addEventListener('popstate', function(event) {
+    pageRender();
+}, false);
