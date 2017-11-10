@@ -29,8 +29,10 @@
 
     "content_scripts": [
         {
+            "css": [
+                "css/twitter.css"
+            ],
             "js": [
-                "js/arrive.js",
                 "js/twitter.js"
             ],
             "matches": [
