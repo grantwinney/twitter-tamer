@@ -72,6 +72,13 @@ function enableDisplayProperty(selector) {
     }
 }
 
+function watchForNewArrivals(selector, action) {
+    document.unbindArrive(selector);
+    document.arrive(selector, function() {
+        action(this);
+    });
+}
+
 // Compare the dom to what the user chose to hide, and show everything else
 function showElementsBasedOnSettings(optionsMap) {
     chrome.storage.sync.get('options', function(result) {
@@ -82,12 +89,23 @@ function showElementsBasedOnSettings(optionsMap) {
             enableVisibilityProperty(selectors.join(','));
             if (selectors.includes(optionsMap.get('hide_other_comments'))) {
                 enableDisplayProperty('.replies-to');
+                watchForNewArrivals('.replies-to', function(element) {
+                    element.style.setProperty('display', 'block');
+                });
+                watchForNewArrivals('.ProfileTweet-actionCount', function(element) {
+                    element.style.setProperty('visibility', 'visible');
+                });
             }
-            if (selectors.includes(optionsMap.get('hide_media_content'))) {
-                enableDisplayProperty(optionsMap.get('hide_media_content'));
+            var hideMedia = optionsMap.get('hide_media_content');
+            if (selectors.includes(hideMedia)) {
+                enableDisplayProperty(hideMedia);
+                watchForNewArrivals(hideMedia, function(element) {
+                    element.style.setProperty('display', 'block');
+                });
             }
-            if (selectors.includes(optionsMap.get('hide_search_top_news'))) {
-                enableDisplayProperty(optionsMap.get('hide_search_top_news'));
+            var topNews = optionsMap.get('hide_search_top_news');
+            if (selectors.includes(topNews)) {
+                enableDisplayProperty(topNews);
             }
         }
     });
@@ -97,7 +115,7 @@ function showElementsBasedOnSettings(optionsMap) {
 //  (there's no sense in comparing/showing anything that's not there anyway, like hiding comments on the search results page)
 function modifyTwitterPageDom() {
     var urlPath = new URL(location.href).pathname;
-    switch(urlPath) {
+    switch (urlPath) {
         case '/':
             showElementsBasedOnSettings(getMainTimelineOptionsMap());
             break;
@@ -125,6 +143,12 @@ function modifyTwitterPageDom() {
 }
 
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
-    // message.event == 'pageload'
-    modifyTwitterPageDom();
+    switch (message.event) {
+        case 'tab_updated':
+            modifyTwitterPageDom();
+            break;
+        case 'tab_updating':
+            chrome.runtime.sendMessage({event: "ping_reply"});
+            break;
+    }
 });
