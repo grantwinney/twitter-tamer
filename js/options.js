@@ -1,8 +1,8 @@
-var optionIds = ['hide_home_link','hide_moments','hide_notifications','hide_messages','hide_bird_icon','hide_search','hide_profile_dropdown','hide_tweet_button',
+var optionIds = ['hide_moments','hide_notifications','hide_messages',
                  'hide_trend_button','hide_who_to_follow','hide_live_video','hide_your_tweet_impressions','hide_footer',
-                 'hide_your_profile_summary','hide_your_profile_stats','hide_other_comments','hide_reply_comments',
-                 'hide_others_profile_header','hide_others_profile_card','hide_others_profile_navigation','hide_others_profile_userlist','hide_others_photorail',
-                 'hide_search_adaptive_filters','hide_search_top_news','hide_search_related_news','hide_search_filter','hide_search_related','hide_search_term'];
+                 'hide_your_profile_summary','hide_other_comments','hide_media_content',
+                 'hide_others_profile_card','hide_others_profile_userlist','hide_others_photorail',
+                 'hide_search_top_news','hide_search_related_news','hide_search_related'];
 
 function loadOptions() {
     chrome.storage.sync.get('options', function(result) {

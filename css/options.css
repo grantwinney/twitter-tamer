@@ -143,3 +143,8 @@ input[type=checkbox], input[type=button], label {
     width: 90%;
     margin: auto;
 }
+
+.option_section_header {
+    font-weight: bold;
+    padding-top: 15px;
+}

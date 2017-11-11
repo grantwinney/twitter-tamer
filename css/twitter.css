@@ -1,20 +1,15 @@
-#global-nav-home, .moments, .notifications, .dm-nav, .bird-topbar-etched, #global-nav-search, #user-dropdown, .topbar-tweet-btn,
+.moments, .notifications, .dm-nav,
 .Trends, .wtf-module, .LiveVideoHomePageModuleContainer, .Footer,
-.DashboardProfileCard, .ProfileCardStats-statList,
-.inline-reply-tweetbox, .ProfileTweet-action--reply, .Icon--reply,
-.ProfileHeaderCard, .ProfileCanopy-navBar, .ProfileUserList, .PhotoRail, .TweetImpressionsModule,
-.AdaptiveFiltersBar, .AdaptiveNewsSmallImageHeadline, .AdaptiveNewsLargeImageHeadline, .AdaptiveNewsRelatedHeadlines,
-.SidebarFilterModule, .AdaptiveRelatedSearches, .SearchNavigation-canopy
+.DashboardProfileCard, .ProfileTweet-actionCount,
+.ProfileHeaderCard, .ProfileUserList, .PhotoRail, .TweetImpressionsModule,
+.AdaptiveNewsRelatedHeadlines, .SidebarFilterModule, .AdaptiveRelatedSearches
 {
     visibility: collapse;
 }
 
 /* Most elements can be hidden without much issue,
-   but some leave an obnoxiously large empty area  */
-.ProfileCanopy-header, .replies-to, .topbar {
+   but some leave a large empty area that needs to be removed  */
+.replies-to, .AdaptiveMediaOuterContainer,
+.AdaptiveNewsSmallImageHeadline, .AdaptiveNewsLargeImageHeadline {
     display: none;
 }
-
-/*.ProfileCanopy {
-    height: 0px !important;
-}*/
