@@ -2,11 +2,15 @@
 
 A Chrome extension to make Twitter more distraction-free, [available in the Chrome Store](https://chrome.google.com/webstore/detail/hide-comments-everywhere/bmhkdngdngchlneelllmdennfpmepbnc).
 
-You can choose which elements you'd like to hide, including:
+When the extension is first installed, nothing is selected, so nothing is hidden. Open the "options" page and choose the elements you'd like to hide, such as:
 
-- Navigation bar items, like "Notifications" or "Messages"
-- Activity on tweets by others, like comments, faves and likes
-- Some media, like images
-- Sidebars like "Trends", "Live Video", "Who to Follow"
-- Others' timelines, including their profile, photos/videos, etc
+- Navigation bar items _(like "Notifications" or "Messages")_
+- Activity on tweets by others _(like comments, faves, and likes)_
+- Some media _(like images)_
+- Sidebars _(like "Trends", "Live Video", "Who to Follow", etc)_
+- Elements of others' timelines _(including their profile, photos/videos, etc)_
 - ... and more
+
+If you have a question or problem, feel free to [open an issue](https://github.com/grantwinney/distraction-free-twitter-chrome-extension/issues). Comments, hit me up on [Twitter](https://twitter.com/GrantWinney).
+
+Sometimes [I write too](https://grantwinney.com/).
