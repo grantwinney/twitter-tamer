@@ -18,7 +18,7 @@ function getSideBarOptionsMap() {
 function getCommentOptionsMap() {
     var optionsMap = new Map();
     optionsMap.set('hide_other_comments', '.replies-to, .ProfileTweet-actionCount');
-    optionsMap.set('hide_media_content', '.AdaptiveMediaOuterContainer');
+    optionsMap.set('hide_media_content', '.AdaptiveMedia-container');
     return optionsMap;
 }
 
@@ -102,7 +102,7 @@ function showElementsBasedOnSettings(optionsMap) {
                 var hideMedia = optionsMap.get('hide_media_content');
                 if (selectors.includes(hideMedia)) {
                     enableDisplayProperty(hideMedia);
-                    watchForNewArrivals(hideMedia, function(element) {
+                    watchForNewArrivals('.AdaptiveMedia-container', function(element) {
                         element.style.setProperty('display', 'block');
                     });
                 }
@@ -150,9 +150,6 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
     switch (message.event) {
         case 'tab_updated':
             modifyTwitterPageDom();
-            break;
-        case 'tab_updating':
-            chrome.runtime.sendMessage({event: "ping_reply"});
             break;
     }
 });

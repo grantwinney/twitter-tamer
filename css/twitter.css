@@ -9,7 +9,7 @@
 
 /* Most elements can be hidden without much issue,
    but some leave a large empty area that needs to be removed  */
-.replies-to, .AdaptiveMediaOuterContainer,
+.replies-to, .AdaptiveMedia-container,
 .AdaptiveNewsSmallImageHeadline, .AdaptiveNewsLargeImageHeadline {
     display: none;
 }

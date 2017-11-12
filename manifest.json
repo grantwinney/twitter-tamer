@@ -17,7 +17,15 @@
     ],
 
     "browser_action": {
-        "default_title": "Distraction Free Twitter"
+        "default_title": "Distraction Free Twitter",
+        "default_icon": {
+            "16": "images/dft-16.png",
+            "32": "images/dft-32.png",
+            "48": "images/dft-48.png",
+            "64": "images/dft-64.png",
+            "128": "images/dft-128.png",
+            "256": "images/dft-256.png"
+        }
     },
 
     "background": {
