@@ -4,7 +4,7 @@
     "homepage_url": "https://github.com/grantwinney/chrome-extension-block-comments",
 
     "name": "Distraction Free Twitter",
-    "description": "Hide various elements of the Twitter experience.",
+    "description": "Hide parts of the Twitter experience that you'd rather ignore.",
     "version": "1.0.0",
 
     "update_url": "http://clients2.google.com/service/update2/crx",
@@ -23,8 +23,7 @@
             "32": "images/dft-32.png",
             "48": "images/dft-48.png",
             "64": "images/dft-64.png",
-            "128": "images/dft-128.png",
-            "256": "images/dft-256.png"
+            "128": "images/dft-128.png"
         }
     },
 
@@ -37,15 +36,15 @@
 
     "content_scripts": [
         {
+            "matches": [
+                "*://*.twitter.com/*"
+            ],
             "css": [
                 "css/twitter.css"
             ],
             "js": [
                 "js/arrive.js",
                 "js/twitter.js"
-            ],
-            "matches": [
-                "*://*.twitter.com/*"
             ],
             "run_at": "document_start"
         }
