@@ -81,33 +81,37 @@ function watchForNewArrivals(selector, action) {
 
 // Compare the dom to what the user chose to hide, and show everything else
 function showElementsBasedOnSettings(optionsMap) {
-    chrome.storage.sync.get('options', function(result) {
-        var selectors = (result == undefined || result.options == undefined)
-            ? Array.from(optionsMap.values())
-            : Array.from(optionsMap.keys()).filter(id => !result.options.includes(id)).map(id => optionsMap.get(id));
-        if (selectors.length > 0) {
-            enableVisibilityProperty(selectors.join(','));
-            if (selectors.includes(optionsMap.get('hide_other_comments'))) {
-                enableDisplayProperty('.replies-to');
-                watchForNewArrivals('.replies-to', function(element) {
-                    element.style.setProperty('display', 'block');
-                });
-                watchForNewArrivals('.ProfileTweet-actionCount', function(element) {
-                    element.style.setProperty('visibility', 'visible');
-                });
+    chrome.storage.local.get('extension_enabled', function(ee_result) {
+        chrome.storage.sync.get('options', function(o_result) {
+            var showEverything = ((ee_result != undefined && ee_result.extension_enabled != undefined && !ee_result.extension_enabled)
+                                  || o_result == undefined || o_result.options == undefined || o_result.options == []);
+            var selectors = showEverything
+                ? Array.from(optionsMap.values())
+                : Array.from(optionsMap.keys()).filter(id => !o_result.options.includes(id)).map(id => optionsMap.get(id));
+            if (selectors.length > 0) {
+                enableVisibilityProperty(selectors.join(','));
+                if (selectors.includes(optionsMap.get('hide_other_comments'))) {
+                    enableDisplayProperty('.replies-to');
+                    watchForNewArrivals('.replies-to', function(element) {
+                        element.style.setProperty('display', 'block');
+                    });
+                    watchForNewArrivals('.ProfileTweet-actionCount', function(element) {
+                        element.style.setProperty('visibility', 'visible');
+                    });
+                }
+                var hideMedia = optionsMap.get('hide_media_content');
+                if (selectors.includes(hideMedia)) {
+                    enableDisplayProperty(hideMedia);
+                    watchForNewArrivals(hideMedia, function(element) {
+                        element.style.setProperty('display', 'block');
+                    });
+                }
+                var topNews = optionsMap.get('hide_search_top_news');
+                if (selectors.includes(topNews)) {
+                    enableDisplayProperty(topNews);
+                }
             }
-            var hideMedia = optionsMap.get('hide_media_content');
-            if (selectors.includes(hideMedia)) {
-                enableDisplayProperty(hideMedia);
-                watchForNewArrivals(hideMedia, function(element) {
-                    element.style.setProperty('display', 'block');
-                });
-            }
-            var topNews = optionsMap.get('hide_search_top_news');
-            if (selectors.includes(topNews)) {
-                enableDisplayProperty(topNews);
-            }
-        }
+        });
     });
 }
 
