@@ -17,7 +17,7 @@ function getSideBarOptionsMap() {
 
 function getCommentOptionsMap() {
     var optionsMap = new Map();
-    optionsMap.set('hide_other_comments', '.replies-to, .ProfileTweet-actionCount');
+    optionsMap.set('hide_other_comments', '.replies-to, .ProfileTweet-actionCount, .tweet-stats-container');
     optionsMap.set('hide_media_content', '.AdaptiveMedia-container');
     return optionsMap;
 }
