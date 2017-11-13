@@ -3,9 +3,9 @@
     "author": "Grant Winney",
     "homepage_url": "https://github.com/grantwinney/chrome-extension-block-comments",
 
-    "name": "Distraction Free Twitter",
-    "description": "Hide parts of the Twitter experience that you'd rather ignore.",
-    "version": "1.0.0",
+    "name": "Twitter Distraction Remover",
+    "description": "Choose what to hide in Twitter - sidebars (live video, who to follow, trends), notifications, activity (comments, likes) and more!",
+    "version": "1.0.2",
 
     "update_url": "http://clients2.google.com/service/update2/crx",
 
