@@ -13,4 +13,4 @@ When the extension is first installed, nothing is selected, so nothing is hidden
 
 If you have a question or problem, feel free to [open an issue](https://github.com/grantwinney/distraction-free-twitter-chrome-extension/issues). Comments, hit me up on [Twitter](https://twitter.com/GrantWinney).
 
-Sometimes [I write too](https://grantwinney.com/). Here's [what I learned while writing this](https://grantwinney.com/sick-of-the-noise-on-twitter-wrote-a-chrome-extension/).
+Sometimes [I write too](https://grantwinney.com/). Here's [what I learned while creating this](https://grantwinney.com/sick-of-the-noise-on-twitter-wrote-a-chrome-extension/).
