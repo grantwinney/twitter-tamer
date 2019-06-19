@@ -2,6 +2,14 @@
 
 A Chrome extension to make Twitter more distraction-free, [available in the Chrome Store](https://chrome.google.com/webstore/detail/twitter-distraction-remov/aflapchiclhldkgbbahbdionenmhkoed).
 
+---
+
+**I dumped Twitter awhile ago** - it's a time-sucking blackhole, I suggest you do the same - **and because of that, I have zero vested interest in supporting this extension anymore, especially for whatever new layout they've designed.**
+
+**I imagine as the new layout becomes the default, this extension will fail to work. It's open source though, so feel free to fork it and create your own extension, or submit a PR that fixes it so I can merge it in. Thanks for your interest.**
+
+---
+
 When the extension is first installed, nothing is selected, so nothing is hidden. Open the "options" page and choose the elements you'd like to hide, such as:
 
 - Navigation bar items _(like "Notifications" or "Messages")_
