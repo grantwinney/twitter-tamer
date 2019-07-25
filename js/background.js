@@ -1,15 +1,3 @@
-function setBrowserActionButton() {
-    chrome.storage.local.get('extension_enabled', function(result) {
-        if (result == undefined || result.extension_enabled == undefined || result.extension_enabled) {
-            chrome.browserAction.setIcon({ path: 'images/dft-64.png' });
-            chrome.browserAction.setTitle({ title: '' });
-        } else {
-            chrome.browserAction.setIcon({ path: 'images/dft-64-bw.png'});
-            chrome.browserAction.setTitle({ title: chrome.runtime.getManifest().name + ' (disabled)'});
-        }
-    });
-}
-
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
     if (changeInfo.status === 'complete') {
         chrome.tabs.sendMessage(tabId, { event: 'tab_updated' });
@@ -18,7 +6,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 
 chrome.browserAction.onClicked.addListener(function(tab) {
     chrome.storage.local.get('extension_enabled', function(result) {
-        var wasEnabled = (result == undefined || result.extension_enabled == undefined || result.extension_enabled);
+        let wasEnabled = (result == undefined || result.extension_enabled == undefined || result.extension_enabled);
         if (wasEnabled) {
             chrome.storage.local.set({'extension_enabled': false}, function() {
                 chrome.browserAction.setIcon({ path: 'images/dft-64-bw.png' });
@@ -38,4 +26,12 @@ chrome.browserAction.onClicked.addListener(function(tab) {
     });
 });
 
-setBrowserActionButton();
+chrome.storage.local.get('extension_enabled', function(result) {
+    if (result == undefined || result.extension_enabled == undefined || result.extension_enabled) {
+        chrome.browserAction.setIcon({ path: 'images/dft-64.png' });
+        chrome.browserAction.setTitle({ title: '' });
+    } else {
+        chrome.browserAction.setIcon({ path: 'images/dft-64-bw.png'});
+        chrome.browserAction.setTitle({ title: chrome.runtime.getManifest().name + ' (disabled)'});
+    }
+});

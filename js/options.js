@@ -1,27 +1,19 @@
-var optionIds = ['hide_moments','hide_notifications','hide_messages',
-                 'hide_trend_button','hide_who_to_follow','hide_live_video','hide_your_tweet_impressions','hide_footer',
-                 'hide_your_profile_summary','hide_other_comments','hide_media_content',
-                 'hide_others_profile_card','hide_others_profile_userlist','hide_others_photorail',
-                 'hide_search_top_news','hide_search_related_news','hide_search_related'];
-
 function loadOptions() {
     chrome.storage.sync.get('options', function(result) {
         if (result != undefined && result.options != undefined) {
             result.options.forEach(function(id) {
                 document.getElementById(id).checked = true;
+                if (id == 'left_banner' || id == 'right_banner') {
+                    document.getElementById(`${id}_details`).classList.add('disabled_option');
+                }
             });
         }
     });
 }
 
 function saveOptions() {
-    var options = [];
-    optionIds.forEach(function(id) {
-        if (document.getElementById(id).checked) {
-            options.push(id);
-        }
-    });
-    chrome.storage.sync.set({'options': options});
+    let selectedOptionIds = Array.from(document.querySelectorAll('input[type=checkbox]:checked')).map(x => x.id);
+    chrome.storage.sync.set({'options': selectedOptionIds});
 }
 
 function showPane(paneToShow) {
@@ -31,10 +23,18 @@ function showPane(paneToShow) {
     document.getElementById('support-menu-item').style.setProperty('text-decoration', paneToShow === 'support' ? 'underline' : 'none');
 }
 
+function registerBannerSectionHeaderClick(bannerId) {
+    document.getElementById(bannerId).addEventListener('click', function(e) {
+        document.getElementById(`${bannerId}_details`).className = (e.srcElement.checked ? 'disabled_option' : '')
+    });
+}
+
 window.addEventListener('DOMContentLoaded', function load(event) {
-    loadOptions();
-    document.getElementById('version').innerHTML = '&copy; 2017, ver ' + chrome.runtime.getManifest().version
+    registerBannerSectionHeaderClick('left_banner');
+    registerBannerSectionHeaderClick('right_banner');
+    document.getElementById('version').innerHTML = `&copy; 2017-${new Date().getFullYear()}, ver ${chrome.runtime.getManifest().version}`
     document.getElementById('options-menu-item').addEventListener('click', function(e) { e.preventDefault(); showPane('options') });
     document.getElementById('support-menu-item').addEventListener('click', function(e) { e.preventDefault(); showPane('support') });
-    document.getElementById('save').addEventListener('click', function(e) { saveOptions(); });
+    document.getElementById('save').addEventListener('click', function(_e) { saveOptions(); });
+    loadOptions();
 });

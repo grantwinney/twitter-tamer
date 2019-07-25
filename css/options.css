@@ -144,7 +144,22 @@ input[type=checkbox], input[type=button], label {
     margin: auto;
 }
 
+.option_container {
+    width: 900px;
+    margin: 0 auto;
+}
+
+.option_section {
+    width: 300px;
+}
+
 .option_section_header {
     font-weight: bold;
+    font-size: larger;
     padding-top: 15px;
+}
+
+.disabled_option {
+    pointer-events: none;
+    opacity: 0.6;
 }
