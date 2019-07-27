@@ -16,6 +16,7 @@ let rMap = new Map();
 rMap.set('search', 'form[role="search"]');
 rMap.set('trends', '[aria-label="Timeline: Trending now"]');
 rMap.set('who_to_follow', '[aria-label="Who to follow"]');
+rMap.set('relevant_people', '[aria-label="Relevant people"]');
 rMap.set('footer', '[aria-label="Footer"]');
 
 // Main Column Elements
@@ -23,12 +24,13 @@ let cMap = new Map();
 cMap.set('new_tweet_notification', '.r-6czh2s');
 cMap.set('tweet_box', '.DraftEditor-root');
 cMap.set('reply', '[data-testid="reply"]');
-cMap.set('retweet', '[data-testid="retweet"]');
-cMap.set('like', '[data-testid="like"]');
+cMap.set('retweet', '[data-testid="retweet"],.r-5kkj8d > div:first-child');
+cMap.set('like', '[data-testid="like"],[data-testid="unlike"],.r-5kkj8d > div:last-child');
 cMap.set('share', '[aria-label="Share Tweet"]');
-cMap.set('replies', '');
-cMap.set('ads', '');
-
+cMap.set('replies', '[aria-label="Timeline: Conversation"] > div > div > div:not(:first-child)');
+cMap.set('media', '.r-t23y2h');
+cMap.set('ads', '[data-testid="tweet"]');
+          
 // All Elements
 let optMap = new Map([...lMap, ...rMap, ...cMap]);
 optMap.set('left_banner', 'header[role="banner"]');
@@ -50,10 +52,10 @@ function watchForNewArrivalsOnce(selector, action) {
 
 function showEverything() {
     watchForNewArrivalsOnce(optMap.get('right_banner'), function(element) {
-        element.style.setProperty('visibility', 'visible');
+        element.style.setProperty('visibility', 'visible', 'important');
     });
     document.querySelectorAll(optMap.get('left_banner')).forEach(function (element) {
-        element.style.setProperty('visibility', 'visible');
+        element.style.setProperty('visibility', 'visible', 'important');
     });
 }
 
@@ -62,12 +64,13 @@ function showAppropriateDomElements() {
         chrome.storage.sync.get('options', function(o_result) {
 
             // If the extension is "disabled" or nothing's selected to hide, show both columns and return
-            if (((ee_result != undefined && ee_result.extension_enabled != undefined && !ee_result.extension_enabled)
-                 || o_result == undefined || o_result.options == undefined || o_result.options.length == 0)) {
+            if (((ee_result !== undefined && ee_result.extension_enabled !== undefined && !ee_result.extension_enabled)
+                 || o_result === undefined || o_result.options === undefined || o_result.options.length === 0)) {
                 showEverything();
                 return;
             }
 
+            let urlPath = new URL(location.href).pathname;
             let elementsToShow = Array.from(optMap.keys()).filter(id => !o_result.options.includes(id));
             let elementsToHide = Array.from(optMap.keys()).filter(id => o_result.options.includes(id));
 
@@ -77,12 +80,12 @@ function showAppropriateDomElements() {
 
                 if (leftSelectorsToHide.length > 0) {
                     watchForNewArrivalsOnce(leftSelectorsToHide, function(element) {
-                        element.style.setProperty('display', 'none');
+                        element.style.setProperty('display', 'none', 'important');
                     });
                 }
 
                 document.querySelectorAll(optMap.get('left_banner')).forEach(function (element) {
-                    element.style.setProperty('visibility', 'visible');
+                    element.style.setProperty('visibility', 'visible', 'important');
                 });
             }
 
@@ -92,22 +95,26 @@ function showAppropriateDomElements() {
 
                 if (rightSelectorsToHide.length > 0) {
                     watchForNewArrivals(rightSelectorsToHide, function(element) {
-                        if (element['outerHTML'].includes('role="search"')) {
-                            element = element.parentElement.parentElement.parentElement.parentElement;
-                            element.nextElementSibling.style.setProperty('display', 'none');
-                        } else if (element['outerHTML'].includes('aria-label="Who to follow"')) {
-                            element = element.parentElement.parentElement;
-                        } else if (element['outerHTML'].includes('aria-label="Footer"')) {
-                            element = element.parentElement;
+                        let oHTML = element['outerHTML'];
+                        if (oHTML.includes('role="search"')) {
+                            goUp(4, element).style.setProperty('display', 'none', 'important');;
+                            element.nextElementSibling.style.setProperty('display', 'none', 'important');
+                        } else if (oHTML.includes('aria-label="Who to follow"')) {
+                            goUp(2, element).style.setProperty('display', 'none', 'important');;
+                        } else if (oHTML.includes('aria-label="Relevant people"')) {
+                            goUp(1, element).style.setProperty('display', 'none', 'important');;
+                        } else if (oHTML.includes('aria-label="Footer"')) {
+                            goUp(1, element).style.setProperty('display', 'none', 'important');;
+                        } else {
+                            element.style.setProperty('display', 'none', 'important');;
                         }
-                        element.style.setProperty('display', 'none');
                         document.querySelectorAll(optMap.get('right_banner')).forEach(function (el) {
-                            el.style.setProperty('visibility', 'visible');
+                            el.style.setProperty('visibility', 'visible', 'important');
                         });
                     });
                 } else {
                     watchForNewArrivalsOnce(optMap.get('right_banner'), function (element) {
-                        element.style.setProperty('visibility', 'visible');
+                        element.style.setProperty('visibility', 'visible', 'important');
                     });
                 }
             }
@@ -117,56 +124,41 @@ function showAppropriateDomElements() {
             if (centerSelectorsToHide.length > 0) {
                 watchForNewArrivals(centerSelectorsToHide, function(element) {
                     let oHTML = element['outerHTML'];
-                    if (oHTML.includes('data-testid="reply"') || oHTML.includes('data-testid="like"')
-                        || oHTML.includes('data-testid="retweet"') || oHTML.includes('aria-label="Share Tweet"')) {
-                        element = element.parentElement;
-                    } else if (element.className = 'DraftEditor-root') {
-                        element = element.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement
-                                         .parentElement.parentElement.parentElement.parentElement.parentElement.parentElement
-                                         .parentElement.parentElement.parentElement.parentElement.parentElement.parentElement;
+                    if (oHTML.includes('data-testid="tweet"')) {
+                        if (elementsToHide.includes('ads') && oHTML.includes('Promoted')) {
+                            goUp(5, element).style.setProperty('display', 'none', 'important');
+                        } else if (elementsToHide.includes('replies') && urlPath.includes('/status/')) {
+                            element.style.setProperty('display', 'none', 'important');
+                        } else if (elementsToHide.includes('media') && element.classList.contains('r-t23y2h')) {
+                            element.style.setProperty('display', 'none', 'important');
+                        }
+                    } else if (oHTML.includes('data-testid="reply"') || oHTML.includes('data-testid="like"') || oHTML.includes('data-testid="unlike"')
+                               || oHTML.includes('data-testid="retweet"') || oHTML.includes('aria-label="Share Tweet"')) {
+                        goUp(1, element).style.setProperty('display', 'none', 'important');
+                    } else {
+                        if (elementsToHide.includes('tweet_box') && element.className === 'DraftEditor-root') {
+                            let e = goUp(18, element);
+                            e.style.setProperty('display', 'none', 'important');;
+                            e.nextElementSibling.style.setProperty('display', 'none', 'important');
+                        } else {
+                            element.style.setProperty('display', 'none', 'important');
+                        }
                     }
-                    element.style.setProperty('display', 'none');
                 });
-            }
-
-            
-
-            let selectors = Array.from(optMap.keys())
-                                 .filter(id => !o_result.options.includes(id))
-                                 .map(id => optMap.get(id));
-
-
-
-
-            if (selectors.length > 0) {
-                // enableVisibilityProperty(selectors.join(','));
-                // if (selectors.includes(optMap.get('hide_other_comments'))) {
-                //     enableDisplayProperty('.replies-to');
-                //     watchForNewArrivals('.replies-to', function(element) {
-                //         element.style.setProperty('display', '');
-                //     });
-                //     watchForNewArrivals('.ProfileTweet-actionCount', function(element) {
-                //         element.style.setProperty('visibility', '');
-                //     });
-                // }
-                // let hideMedia = optMap.get('hide_media_content');
-                // if (selectors.includes(hideMedia)) {
-                //     enableDisplayProperty(hideMedia);
-                //     watchForNewArrivals('.AdaptiveMedia-container', function(element) {
-                //         element.style.setProperty('display', '');
-                //     });
-                // }
-                // let topNews = optMap.get('hide_search_top_news');
-                // if (selectors.includes(topNews)) {
-                //     enableDisplayProperty(topNews);
-                // }
             }
         });
     });
 }
 
+function goUp(levels, element) {
+    if (levels > 0) {
+        return goUp(levels-1, element.parentElement);
+    }
+    return element;
+}
+
 chrome.runtime.onMessage.addListener(function(message, _sender, _sendResponse) {
-    if (message.event == 'tab_updated') {
+    if (message.event === 'tab_updated') {
         showAppropriateDomElements();
     }
 });
