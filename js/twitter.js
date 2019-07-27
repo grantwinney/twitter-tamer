@@ -21,8 +21,8 @@ rMap.set('footer', '[aria-label="Footer"]');
 
 // Main Column Elements
 let cMap = new Map();
-cMap.set('new_tweet_notification', '.r-6czh2s');
-cMap.set('tweet_box', '.DraftEditor-root');
+cMap.set('new_tweet_notification', '[role="status"]');
+cMap.set('tweet_box', '[aria-label="Tweet"],[data-testid="reply"],.DraftEditor-root');
 cMap.set('reply', '[data-testid="reply"]');
 cMap.set('retweet', '[data-testid="retweet"],.r-5kkj8d > div:first-child');
 cMap.set('like', '[data-testid="like"],[data-testid="unlike"],.r-5kkj8d > div:last-child');
@@ -30,7 +30,7 @@ cMap.set('share', '[aria-label="Share Tweet"]');
 cMap.set('replies', '[aria-label="Timeline: Conversation"] > div > div > div:not(:first-child)');
 cMap.set('media', '.r-t23y2h');
 cMap.set('ads', '[data-testid="tweet"]');
-          
+
 // All Elements
 let optMap = new Map([...lMap, ...rMap, ...cMap]);
 optMap.set('left_banner', 'header[role="banner"]');
@@ -138,7 +138,7 @@ function showAppropriateDomElements() {
                     } else {
                         if (elementsToHide.includes('tweet_box') && element.className === 'DraftEditor-root') {
                             let e = goUp(18, element);
-                            e.style.setProperty('display', 'none', 'important');;
+                            e.style.setProperty('display', 'none', 'important');
                             e.nextElementSibling.style.setProperty('display', 'none', 'important');
                         } else {
                             element.style.setProperty('display', 'none', 'important');
