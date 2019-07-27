@@ -7,8 +7,6 @@
     "description": "Choose what to hide in Twitter - sidebars (who to follow, trends), notifications, activity (comments, likes) and more!",
     "version": "2.0.0",
 
-    "update_url": "http://clients2.google.com/service/update2/crx",
-
     "options_page": "options.html",
 
     "permissions": [
