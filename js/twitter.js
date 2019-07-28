@@ -54,9 +54,9 @@ function showEverything() {
     watchForNewArrivalsOnce(optMap.get('right_banner'), function(element) {
         element.style.setProperty('visibility', 'visible', 'important');
     });
-    document.querySelectorAll(optMap.get('left_banner')).forEach(function (element) {
-        element.style.setProperty('visibility', 'visible', 'important');
-    });
+    
+    let leftBanner = document.querySelector(optMap.get('left_banner'));
+    leftBanner.style.setProperty('visibility', 'visible', 'important');
 }
 
 function showAppropriateDomElements() {
@@ -84,9 +84,8 @@ function showAppropriateDomElements() {
                     });
                 }
 
-                document.querySelectorAll(optMap.get('left_banner')).forEach(function (element) {
-                    element.style.setProperty('visibility', 'visible', 'important');
-                });
+                let leftBanner = document.querySelector(optMap.get('left_banner'));
+                leftBanner.style.setProperty('visibility', 'visible', 'important');
             }
 
             // Right Column Elements
@@ -108,9 +107,9 @@ function showAppropriateDomElements() {
                         } else {
                             element.style.setProperty('display', 'none', 'important');;
                         }
-                        document.querySelectorAll(optMap.get('right_banner')).forEach(function (el) {
-                            el.style.setProperty('visibility', 'visible', 'important');
-                        });
+
+                        let rightBanner = document.querySelector(optMap.get('right_banner'));
+                        rightBanner.style.setProperty('visibility', 'visible', 'important');
                     });
                 } else {
                     watchForNewArrivalsOnce(optMap.get('right_banner'), function (element) {
