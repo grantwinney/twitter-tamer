@@ -28,7 +28,7 @@ cMap.set('retweet', '[data-testid="retweet"],.r-5kkj8d > div:first-child');
 cMap.set('like', '[data-testid="like"],[data-testid="unlike"],.r-5kkj8d > div:last-child');
 cMap.set('share', '[aria-label="Share Tweet"]');
 cMap.set('replies', '[aria-label="Timeline: Conversation"] > div > div > div:not(:first-child)');
-cMap.set('media', '.r-t23y2h');
+cMap.set('media', '.r-9x6qib');
 cMap.set('ads', '[data-testid="tweet"]');
 
 // All Elements
@@ -128,7 +128,7 @@ function showAppropriateDomElements() {
                             goUp(5, element).style.setProperty('display', 'none', 'important');
                         } else if (elementsToHide.includes('replies') && urlPath.includes('/status/')) {
                             element.style.setProperty('display', 'none', 'important');
-                        } else if (elementsToHide.includes('media') && element.classList.contains('r-t23y2h')) {
+                        } else if (elementsToHide.includes('media') && element.classList.contains('r-9x6qib')) {
                             element.style.setProperty('display', 'none', 'important');
                         }
                     } else if (oHTML.includes('data-testid="reply"') || oHTML.includes('data-testid="like"') || oHTML.includes('data-testid="unlike"')

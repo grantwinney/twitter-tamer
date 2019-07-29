@@ -159,6 +159,11 @@ input[type=checkbox], input[type=button], label {
     padding-top: 15px;
 }
 
+.option_note {
+    font-size: smaller;
+    color: #999;
+}
+
 .disabled_option {
     pointer-events: none;
     opacity: 0.6;
