@@ -1,7 +1,7 @@
 body {
     text-align: center;
     margin: 0px;
-    font-size: 90%;
+    font-size: smaller;
     line-height: 1.6em;
 }
 
@@ -142,15 +142,6 @@ input[type=checkbox], input[type=button], label {
     padding-bottom: 10;
     width: 90%;
     margin: auto;
-}
-
-.option_container {
-    width: 900px;
-    margin: 0 auto;
-}
-
-.option_section {
-    width: 300px;
 }
 
 .option_section_header {
