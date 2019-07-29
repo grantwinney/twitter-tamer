@@ -24,8 +24,8 @@ let cMap = new Map();
 cMap.set('new_tweet_notification', '[role="status"]');
 cMap.set('tweet_box', '[aria-label="Tweet"],[data-testid="reply"],.DraftEditor-root');
 cMap.set('reply', '[data-testid="reply"]');
-cMap.set('retweet', '[data-testid="retweet"],.r-5kkj8d > div:first-child');
-cMap.set('like', '[data-testid="like"],[data-testid="unlike"],.r-5kkj8d > div:last-child');
+cMap.set('retweet', '[data-testid="retweet"],.r-5kkj8d:not([role="group"]) > div:first-child');
+cMap.set('like', '[data-testid="like"],[data-testid="unlike"],.r-5kkj8d:not([role="group"]) > div:last-child');
 cMap.set('share', '[aria-label="Share Tweet"]');
 cMap.set('replies', '[aria-label="Timeline: Conversation"] > div > div > div:not(:first-child)');
 cMap.set('media', '.r-9x6qib');
@@ -133,7 +133,7 @@ function showAppropriateDomElements() {
                         }
                     } else if (oHTML.includes('data-testid="reply"') || oHTML.includes('data-testid="like"') || oHTML.includes('data-testid="unlike"')
                                || oHTML.includes('data-testid="retweet"') || oHTML.includes('aria-label="Share Tweet"')) {
-                        goUp(1, element).style.setProperty('display', 'none', 'important');
+                        element.style.setProperty('display', 'none', 'important');
                     } else {
                         if (elementsToHide.includes('tweet_box') && element.className === 'DraftEditor-root') {
                             let e = goUp(18, element);
