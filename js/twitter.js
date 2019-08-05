@@ -81,11 +81,14 @@ function showAppropriateDomElements() {
                 if (leftSelectorsToHide.length > 0) {
                     watchForNewArrivalsOnce(leftSelectorsToHide, function(element) {
                         element.style.setProperty('display', 'none', 'important');
+                        let leftBanner = document.querySelector(optMap.get('left_banner'));
+                        leftBanner.style.setProperty('visibility', 'visible', 'important');
+                    });
+                } else {
+                    watchForNewArrivalsOnce(optMap.get('left_banner'), function (element) {
+                        element.style.setProperty('visibility', 'visible', 'important');
                     });
                 }
-
-                let leftBanner = document.querySelector(optMap.get('left_banner'));
-                leftBanner.style.setProperty('visibility', 'visible', 'important');
             }
 
             // Right Column Elements
