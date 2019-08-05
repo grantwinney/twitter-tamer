@@ -52,11 +52,11 @@ function watchForNewArrivalsOnce(selector, action) {
 
 function showEverything() {
     watchForNewArrivalsOnce(optMap.get('right_banner'), function(element) {
-        element.style.setProperty('visibility', 'visible', 'important');
+        element.style.setProperty('visibility', 'visible');
     });
     
     let leftBanner = document.querySelector(optMap.get('left_banner'));
-    leftBanner.style.setProperty('visibility', 'visible', 'important');
+    leftBanner.style.setProperty('visibility', 'visible');
 }
 
 function showAppropriateDomElements() {
@@ -80,14 +80,13 @@ function showAppropriateDomElements() {
 
                 if (leftSelectorsToHide.length > 0) {
                     watchForNewArrivalsOnce(leftSelectorsToHide, function(element) {
-                        element.style.setProperty('display', 'none', 'important');
+                        element.style.setProperty('display', 'none');
                         let leftBanner = document.querySelector(optMap.get('left_banner'));
-                        leftBanner.style.setProperty('visibility', 'visible', 'important');
+                        leftBanner.style.setProperty('visibility', 'visible');
                     });
                 } else {
-                    watchForNewArrivalsOnce(optMap.get('left_banner'), function (element) {
-                        element.style.setProperty('visibility', 'visible', 'important');
-                    });
+                    let leftBanner = document.querySelector(optMap.get('left_banner'));
+                    leftBanner.style.setProperty('visibility', 'visible');
                 }
             }
 
@@ -99,24 +98,24 @@ function showAppropriateDomElements() {
                     watchForNewArrivals(rightSelectorsToHide, function(element) {
                         let oHTML = element['outerHTML'];
                         if (oHTML.includes('role="search"')) {
-                            goUp(4, element).style.setProperty('display', 'none', 'important');;
-                            element.nextElementSibling.style.setProperty('display', 'none', 'important');
+                            goUp(4, element).style.setProperty('display', 'none');;
+                            element.nextElementSibling.style.setProperty('display', 'none');
                         } else if (oHTML.includes('aria-label="Who to follow"')) {
-                            goUp(2, element).style.setProperty('display', 'none', 'important');;
+                            goUp(2, element).style.setProperty('display', 'none');;
                         } else if (oHTML.includes('aria-label="Relevant people"')) {
-                            goUp(1, element).style.setProperty('display', 'none', 'important');;
+                            goUp(1, element).style.setProperty('display', 'none');;
                         } else if (oHTML.includes('aria-label="Footer"')) {
-                            goUp(1, element).style.setProperty('display', 'none', 'important');;
+                            goUp(1, element).style.setProperty('display', 'none');;
                         } else {
-                            element.style.setProperty('display', 'none', 'important');;
+                            element.style.setProperty('display', 'none');;
                         }
 
                         let rightBanner = document.querySelector(optMap.get('right_banner'));
-                        rightBanner.style.setProperty('visibility', 'visible', 'important');
+                        rightBanner.style.setProperty('visibility', 'visible');
                     });
                 } else {
                     watchForNewArrivalsOnce(optMap.get('right_banner'), function (element) {
-                        element.style.setProperty('visibility', 'visible', 'important');
+                        element.style.setProperty('visibility', 'visible');
                     });
                 }
             }
@@ -128,22 +127,22 @@ function showAppropriateDomElements() {
                     let oHTML = element['outerHTML'];
                     if (oHTML.includes('data-testid="tweet"')) {
                         if (elementsToHide.includes('ads') && oHTML.includes('Promoted')) {
-                            goUp(5, element).style.setProperty('display', 'none', 'important');
+                            goUp(5, element).style.setProperty('display', 'none');
                         } else if (elementsToHide.includes('replies') && urlPath.includes('/status/')) {
-                            element.style.setProperty('display', 'none', 'important');
+                            element.style.setProperty('display', 'none');
                         } else if (elementsToHide.includes('media') && element.classList.contains('r-9x6qib')) {
-                            element.style.setProperty('display', 'none', 'important');
+                            element.style.setProperty('display', 'none');
                         }
                     } else if (oHTML.includes('data-testid="reply"') || oHTML.includes('data-testid="like"') || oHTML.includes('data-testid="unlike"')
                                || oHTML.includes('data-testid="retweet"') || oHTML.includes('aria-label="Share Tweet"')) {
-                        element.style.setProperty('display', 'none', 'important');
+                        element.style.setProperty('display', 'none');
                     } else {
                         if (elementsToHide.includes('tweet_box') && element.className === 'DraftEditor-root') {
                             let e = goUp(18, element);
-                            e.style.setProperty('display', 'none', 'important');
-                            e.nextElementSibling.style.setProperty('display', 'none', 'important');
+                            e.style.setProperty('display', 'none');
+                            e.nextElementSibling.style.setProperty('display', 'none');
                         } else {
-                            element.style.setProperty('display', 'none', 'important');
+                            element.style.setProperty('display', 'none');
                         }
                     }
                 });
