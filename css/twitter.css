@@ -1,9 +1,0 @@
-/* left banner */
-header[role='banner'] {
-    visibility: collapse;
-}
-
-/* right banner */
-div[data-testid='sidebarColumn'] {
-    visibility: collapse;
-}

@@ -5,7 +5,7 @@
 
     "name": "Twitter Tamer",
     "description": "Choose what to hide in Twitter - sidebars (who to follow, trends), notifications, activity (comments, likes) and more!",
-    "version": "2.0.6",
+    "version": "2.0.7",
 
     "options_ui": {
         "page": "options.html"
@@ -38,9 +38,6 @@
         {
             "matches": [
                 "*://*.twitter.com/*"
-            ],
-            "css": [
-                "css/twitter.css"
             ],
             "js": [
                 "js/arrive.js",

@@ -10,6 +10,7 @@ lMap.set('lists_button', '[aria-label="Lists"]');
 lMap.set('profile_button', '[aria-label="Profile"]');
 lMap.set('more_button', '[data-testid="AppTabBar_More_Menu"]');
 lMap.set('tweet_button', '[aria-label="Tweet"]');
+lMap.set('left_banner', 'header[role="banner"]');
 
 // Right Column Elements
 let rMap = new Map();
@@ -18,6 +19,7 @@ rMap.set('trends', '[aria-label="Timeline: Trending now"]');
 rMap.set('who_to_follow', '[aria-label="Who to follow"]');
 rMap.set('relevant_people', '[aria-label="Relevant people"]');
 rMap.set('footer', '[aria-label="Footer"]');
+rMap.set('right_banner', '[data-testid="sidebarColumn"]');
 
 // Main Column Elements
 let cMap = new Map();
@@ -33,8 +35,6 @@ cMap.set('ads', '[data-testid="tweet"]');
 
 // All Elements
 let optMap = new Map([...lMap, ...rMap, ...cMap]);
-optMap.set('left_banner', 'header[role="banner"]');
-optMap.set('right_banner', '[data-testid="sidebarColumn"]');
 
 function watchForNewArrivals(selector, action) {
     document.unbindArrive(selector);
@@ -50,50 +50,40 @@ function watchForNewArrivalsOnce(selector, action) {
     });
 }
 
-function showEverything() {
-    watchForNewArrivalsOnce(optMap.get('right_banner'), function(element) {
-        element.style.setProperty('visibility', 'visible');
-    });
-    
-    let leftBanner = document.querySelector(optMap.get('left_banner'));
-    leftBanner.style.setProperty('visibility', 'visible');
-}
-
 function showAppropriateDomElements() {
     chrome.storage.local.get('extension_enabled', function(ee_result) {
         chrome.storage.sync.get('options', function(o_result) {
 
-            // If the extension is "disabled" or nothing's selected to hide, show both columns and return
+            // If the extension is "disabled" or nothing's selected to hide, just return
             if (((ee_result !== undefined && ee_result.extension_enabled !== undefined && !ee_result.extension_enabled)
                  || o_result === undefined || o_result.options === undefined || o_result.options.length === 0)) {
-                showEverything();
                 return;
             }
 
-            let urlPath = new URL(location.href).pathname;
-            let elementsToShow = Array.from(optMap.keys()).filter(id => !o_result.options.includes(id));
+            // let urlPath = new URL(location.href).pathname;
             let elementsToHide = Array.from(optMap.keys()).filter(id => o_result.options.includes(id));
 
             // Left Column Elements
-            if (elementsToShow.includes('left_banner')) {
+            if (elementsToHide.includes('left_banner')) {
+                watchForNewArrivalsOnce(lMap.get('left_banner'), function(element) {
+                    element.style.setProperty('display', 'none');
+                });
+            } else {
                 let leftSelectorsToHide = elementsToHide.filter(id => Array.from(lMap.keys()).includes(id)).map(id => lMap.get(id)).join(',');
-
                 if (leftSelectorsToHide.length > 0) {
                     watchForNewArrivalsOnce(leftSelectorsToHide, function(element) {
                         element.style.setProperty('display', 'none');
-                        let leftBanner = document.querySelector(optMap.get('left_banner'));
-                        leftBanner.style.setProperty('visibility', 'visible');
                     });
-                } else {
-                    let leftBanner = document.querySelector(optMap.get('left_banner'));
-                    leftBanner.style.setProperty('visibility', 'visible');
                 }
             }
 
             // Right Column Elements
-            if (elementsToShow.includes('right_banner')) {
+            if (elementsToHide.includes('right_banner')) {
+                watchForNewArrivalsOnce(rMap.get('right_banner'), function(element) {
+                    element.style.setProperty('display', 'none');
+                });
+            } else {
                 let rightSelectorsToHide = elementsToHide.filter(id => Array.from(rMap.keys()).includes(id)).map(id => rMap.get(id)).join(',');
-
                 if (rightSelectorsToHide.length > 0) {
                     watchForNewArrivals(rightSelectorsToHide, function(element) {
                         let oHTML = element['outerHTML'];
@@ -109,13 +99,6 @@ function showAppropriateDomElements() {
                         } else {
                             element.style.setProperty('display', 'none');;
                         }
-
-                        let rightBanner = document.querySelector(optMap.get('right_banner'));
-                        rightBanner.style.setProperty('visibility', 'visible');
-                    });
-                } else {
-                    watchForNewArrivalsOnce(optMap.get('right_banner'), function (element) {
-                        element.style.setProperty('visibility', 'visible');
                     });
                 }
             }
