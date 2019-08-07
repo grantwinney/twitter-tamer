@@ -29,6 +29,14 @@ function registerBannerSectionHeaderClick(bannerId) {
     });
 }
 
+function resetOptions() {
+    if (chrome.extension.getBackgroundPage().confirm('This will reset the settings for this extension. Are you sure?')) {
+        chrome.storage.sync.clear(function() {
+            location.reload();
+        });
+    }
+}
+
 window.addEventListener('DOMContentLoaded', function load(event) {
     registerBannerSectionHeaderClick('left_banner');
     registerBannerSectionHeaderClick('right_banner');
@@ -36,5 +44,6 @@ window.addEventListener('DOMContentLoaded', function load(event) {
     document.getElementById('options-menu-item').addEventListener('click', function(e) { e.preventDefault(); showPane('options') });
     document.getElementById('support-menu-item').addEventListener('click', function(e) { e.preventDefault(); showPane('support') });
     document.getElementById('save').addEventListener('click', function(_e) { saveOptions(); });
+    document.getElementById('reset').addEventListener('click', function(_e) { resetOptions(); });
     loadOptions();
 });

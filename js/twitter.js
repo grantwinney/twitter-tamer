@@ -88,16 +88,19 @@ function showAppropriateDomElements() {
                     watchForNewArrivals(rightSelectorsToHide, function(element) {
                         let oHTML = element['outerHTML'];
                         if (oHTML.includes('role="search"')) {
-                            goUp(4, element).style.setProperty('display', 'none');;
-                            element.nextElementSibling.style.setProperty('display', 'none');
+                            goUp(4, element).style.setProperty('display', 'none');
+                            let sib = element.nextElementSibling;
+                            if (sib) {
+                                sib.style.setProperty('display', 'none');
+                            }
                         } else if (oHTML.includes('aria-label="Who to follow"')) {
-                            goUp(2, element).style.setProperty('display', 'none');;
+                            goUp(2, element).style.setProperty('display', 'none');
                         } else if (oHTML.includes('aria-label="Relevant people"')) {
-                            goUp(1, element).style.setProperty('display', 'none');;
+                            goUp(1, element).style.setProperty('display', 'none');
                         } else if (oHTML.includes('aria-label="Footer"')) {
-                            goUp(1, element).style.setProperty('display', 'none');;
+                            goUp(1, element).style.setProperty('display', 'none');
                         } else {
-                            element.style.setProperty('display', 'none');;
+                            element.style.setProperty('display', 'none');
                         }
                     });
                 }
