@@ -32,6 +32,7 @@ cMap.set('share', '[aria-label="Share Tweet"]');
 cMap.set('replies', '[aria-label="Timeline: Conversation"] > div > div > div:not(:first-child)');
 cMap.set('media', '.r-9x6qib');
 cMap.set('ads', '[data-testid="tweet"]');
+cMap.set('who_to_follow_main', '[data-testid="UserCell"]');
 
 // All Elements
 let optMap = new Map([...lMap, ...rMap, ...cMap]);
@@ -89,12 +90,12 @@ function showAppropriateDomElements() {
                         let oHTML = element['outerHTML'];
                         if (oHTML.includes('role="search"')) {
                             goUp(4, element).style.setProperty('display', 'none');
-                            let sib = element.nextElementSibling;
+                            let sib = element.nextSibling;
                             if (sib) {
                                 sib.style.setProperty('display', 'none');
                             }
                         } else if (oHTML.includes('aria-label="Who to follow"')) {
-                            goUp(2, element).style.setProperty('display', 'none');
+                            goUp(1, element).style.setProperty('display', 'none');
                         } else if (oHTML.includes('aria-label="Relevant people"')) {
                             goUp(1, element).style.setProperty('display', 'none');
                         } else if (oHTML.includes('aria-label="Footer"')) {
@@ -113,7 +114,10 @@ function showAppropriateDomElements() {
                     let oHTML = element['outerHTML'];
                     if (oHTML.includes('data-testid="tweet"')) {
                         if (elementsToHide.includes('ads') && oHTML.includes('Promoted')) {
-                            goUp(5, element).style.setProperty('display', 'none');
+                            let p = goUp(5, element);
+                            p.style.setProperty('display', 'none');
+                            safeHideSiblings(p.parentElement, -1);
+                            safeHideSiblings(p.parentElement, 1);
                         } else if (elementsToHide.includes('replies') && urlPath.includes('/status/')) {
                             element.style.setProperty('display', 'none');
                         } else if (elementsToHide.includes('media') && element.classList.contains('r-9x6qib')) {
@@ -122,11 +126,16 @@ function showAppropriateDomElements() {
                     } else if (oHTML.includes('data-testid="reply"') || oHTML.includes('data-testid="like"') || oHTML.includes('data-testid="unlike"')
                                || oHTML.includes('data-testid="retweet"') || oHTML.includes('aria-label="Share Tweet"')) {
                         element.style.setProperty('display', 'none');
+                    } else if (oHTML.includes('data-testid="UserCell"')) {
+                        element.style.setProperty('display', 'none');
+                        let p = element.parentElement.parentElement;
+                        safeHideSiblings(p, -3);
+                        safeHideSiblings(p, 3);
                     } else {
                         if (elementsToHide.includes('tweet_box') && element.className === 'DraftEditor-root') {
                             let e = goUp(18, element);
                             e.style.setProperty('display', 'none');
-                            e.nextElementSibling.style.setProperty('display', 'none');
+                            e.nextSibling.style.setProperty('display', 'none');
                         } else {
                             element.style.setProperty('display', 'none');
                         }
@@ -137,11 +146,33 @@ function showAppropriateDomElements() {
     });
 }
 
+// return the nth parent element
 function goUp(levels, element) {
     if (levels > 0) {
         return goUp(levels-1, element.parentElement);
     }
     return element;
+}
+
+// hide n sibling elements before (negative number) or after (positive number) an element
+// if one of the siblings is missing (null/undefined), returns without throwing an error
+function safeHideSiblings(element, number_of_siblings) {
+    if (!element || number_of_siblings === 0) {
+        return;
+    }
+    if (number_of_siblings < 0) {
+        let sibling = element.previousSibling;
+        if (sibling) {
+            sibling.style.setProperty('display', 'none');
+            safeHideSiblings(sibling, number_of_siblings+1)
+        }
+    } else {
+        let sibling = element.nextSibling;
+        if (sibling) {
+            sibling.style.setProperty('display', 'none');
+            safeHideSiblings(sibling, number_of_siblings-1)
+        }
+    }
 }
 
 chrome.runtime.onMessage.addListener(function(message, _sender, _sendResponse) {
