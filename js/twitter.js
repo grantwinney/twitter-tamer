@@ -51,6 +51,16 @@ function watchForNewArrivalsOnce(selector, action) {
     });
 }
 
+function tryHideElement(element) {
+    if (element) {
+        element.style.setProperty('display', 'none');
+    }
+}
+
+function tryHideElements(elements) {
+    elements.forEach(element => tryHideElement(element));
+}
+
 function showAppropriateDomElements() {
     chrome.storage.local.get('extension_enabled', function(ee_result) {
         chrome.storage.sync.get('options', function(o_result) {
@@ -66,12 +76,14 @@ function showAppropriateDomElements() {
 
             // Left Column Elements
             if (elementsToHide.includes('left_banner')) {
+                tryHideElement(document.querySelector(lMap.get('left_banner')));
                 watchForNewArrivalsOnce(lMap.get('left_banner'), function(element) {
                     element.style.setProperty('display', 'none');
                 });
             } else {
                 let leftSelectorsToHide = elementsToHide.filter(id => Array.from(lMap.keys()).includes(id)).map(id => lMap.get(id)).join(',');
                 if (leftSelectorsToHide.length > 0) {
+                    tryHideElements(document.querySelectorAll(leftSelectorsToHide));
                     watchForNewArrivalsOnce(leftSelectorsToHide, function(element) {
                         element.style.setProperty('display', 'none');
                     });
@@ -80,12 +92,14 @@ function showAppropriateDomElements() {
 
             // Right Column Elements
             if (elementsToHide.includes('right_banner')) {
-                watchForNewArrivalsOnce(rMap.get('right_banner'), function(element) {
+                tryHideElement(document.querySelector(rMap.get('right_banner')));
+                watchForNewArrivals(rMap.get('right_banner'), function(element) {
                     element.style.setProperty('display', 'none');
                 });
             } else {
                 let rightSelectorsToHide = elementsToHide.filter(id => Array.from(rMap.keys()).includes(id)).map(id => rMap.get(id)).join(',');
                 if (rightSelectorsToHide.length > 0) {
+                    tryHideElements(document.querySelectorAll(rightSelectorsToHide));
                     watchForNewArrivals(rightSelectorsToHide, function(element) {
                         let oHTML = element['outerHTML'];
                         if (oHTML.includes('role="search"')) {
