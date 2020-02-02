@@ -23,6 +23,7 @@ rMap.set('right_banner', '[data-testid="sidebarColumn"]');
 
 // Main Column Elements
 let cMap = new Map();
+cMap.set('home_timeline', '[aria-label="Timeline: Your Home Timeline"]');
 cMap.set('new_tweet_notification', '[role="status"]');
 cMap.set('tweet_box', '[aria-label="Tweet"],[data-testid="reply"],.DraftEditor-root');
 cMap.set('reply', '[data-testid="reply"]');
@@ -126,6 +127,10 @@ function showAppropriateDomElements() {
             if (centerSelectorsToHide.length > 0) {
                 watchForNewArrivals(centerSelectorsToHide, function(element) {
                     let oHTML = element['outerHTML'];
+                    // Hide home timeline
+                    if (elementsToHide.includes('home_timeline')) {
+                        element.style.setProperty('display', 'none');
+                    };
                     if (oHTML.includes('data-testid="tweet"')) {
                         if (elementsToHide.includes('ads') && oHTML.includes('Promoted')) {
                             let p = goUp(5, element);
