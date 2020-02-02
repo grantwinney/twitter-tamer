@@ -130,7 +130,7 @@ function showAppropriateDomElements() {
                     // Hide home timeline
                     if (elementsToHide.includes('home_timeline')) {
                         element.style.setProperty('display', 'none');
-                    };
+                    }
                     if (oHTML.includes('data-testid="tweet"')) {
                         if (elementsToHide.includes('ads') && oHTML.includes('Promoted')) {
                             let p = goUp(5, element);
