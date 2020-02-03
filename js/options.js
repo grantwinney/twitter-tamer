@@ -3,7 +3,7 @@ function loadOptions() {
         if (result != undefined && result.options != undefined) {
             result.options.forEach(function(id) {
                 document.getElementById(id).checked = true;
-                if (id == 'left_banner' || id == 'right_banner') {
+                if (id == 'left_banner' || id == 'right_banner' || id == 'main') {
                     document.getElementById(`${id}_details`).classList.add('disabled_option');
                 }
             });
@@ -40,6 +40,7 @@ function resetOptions() {
 window.addEventListener('DOMContentLoaded', function load(event) {
     registerBannerSectionHeaderClick('left_banner');
     registerBannerSectionHeaderClick('right_banner');
+    registerBannerSectionHeaderClick('main');
     document.getElementById('version').innerHTML = `&copy; 2017-${new Date().getFullYear()}, ver ${chrome.runtime.getManifest().version}`
     document.getElementById('options-menu-item').addEventListener('click', function(e) { e.preventDefault(); showPane('options') });
     document.getElementById('support-menu-item').addEventListener('click', function(e) { e.preventDefault(); showPane('support') });

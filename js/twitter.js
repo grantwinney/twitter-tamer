@@ -14,25 +14,27 @@ lMap.set('left_banner', 'header[role="banner"]');
 
 // Right Column Elements
 let rMap = new Map();
-rMap.set('search', 'form[role="search"]');
 rMap.set('trends', '[aria-label="Timeline: Trending now"]');
 rMap.set('who_to_follow', '[aria-label="Who to follow"]');
 rMap.set('relevant_people', '[aria-label="Relevant people"]');
 rMap.set('footer', '[aria-label="Footer"]');
 rMap.set('right_banner', '[data-testid="sidebarColumn"]');
+rMap.set('search', '[role="search"],[href="/search-advanced"]');
 
 // Main Column Elements
 let cMap = new Map();
-cMap.set('new_tweet_notification', '[role="status"]');
-cMap.set('tweet_box', '[aria-label="Tweet"],[data-testid="reply"],.DraftEditor-root');
+// cMap.set('new_tweet_notification', '[role="status"]');  // STILL NEEDED?
+cMap.set('tweet_box', '.DraftEditor-root');
+cMap.set('timeline', '[aria-label="Timeline: Your Home Timeline"]');
 cMap.set('reply', '[data-testid="reply"]');
-cMap.set('retweet', '[data-testid="retweet"],.r-5kkj8d:not([role="group"]) > div:first-child');
-cMap.set('like', '[data-testid="like"],[data-testid="unlike"],.r-5kkj8d:not([role="group"]) > div:last-child');
+cMap.set('retweet', '[data-testid="retweet"]');
+cMap.set('like', '[data-testid="like"],[data-testid="unlike"]');
 cMap.set('share', '[aria-label="Share Tweet"]');
-cMap.set('replies', '[aria-label="Timeline: Conversation"] > div > div > div:not(:first-child)');
-cMap.set('media', '.r-9x6qib');
-cMap.set('ads', '[data-testid="tweet"]');
+cMap.set('replies', '[aria-label="Timeline: Conversation"]');
+// cMap.set('media', 'article[role="article"] div.r-9x6qib a[role="link"]'); //[target="_blank"]
+cMap.set('ads', '[data-testid="tweet"] span');
 cMap.set('who_to_follow_main', '[data-testid="UserCell"]');
+cMap.set('main', '[data-testid="primaryColumn"]');
 
 // All Elements
 let optMap = new Map([...lMap, ...rMap, ...cMap]);
@@ -61,6 +63,49 @@ function tryHideElements(elements) {
     elements.forEach(element => tryHideElement(element));
 }
 
+
+// return the nth parent node
+function navUpDomTree(levels, node) {
+    if (levels > 0) {
+        return navUpDomTree(levels-1, node.parentElement);
+    } else {
+        return node;
+    }
+}
+
+// hide n sibling elements before (negative number) or after (positive number) an element
+// if one of the siblings is missing (null/undefined), returns without throwing an error
+function safeHideSiblings(element, number_of_siblings) {
+    if (!element || number_of_siblings === 0) {
+        return;
+    }
+    if (number_of_siblings < 0) {
+        let sibling = element.previousSibling;
+        if (sibling) {
+            sibling.style.setProperty('display', 'none');
+            safeHideSiblings(sibling, number_of_siblings+1)
+        }
+    } else {
+        let sibling = element.nextSibling;
+        if (sibling) {
+            sibling.style.setProperty('display', 'none');
+            safeHideSiblings(sibling, number_of_siblings-1)
+        }
+    }
+}
+
+function hasAttributeValue(element, attribute, attributeValue) {
+    return element
+        && element.hasAttribute(attribute)
+        && element.getAttribute(attribute) == attributeValue;
+}
+
+function hasAttributeValues(element, attribute, attributeValues) {
+    return element
+        && element.hasAttribute(attribute)
+        && attributeValues.some(av => element.getAttribute(attribute) == av);
+}
+
 function showAppropriateDomElements() {
     chrome.storage.local.get('extension_enabled', function(ee_result) {
         chrome.storage.sync.get('options', function(o_result) {
@@ -71,7 +116,6 @@ function showAppropriateDomElements() {
                 return;
             }
 
-            // let urlPath = new URL(location.href).pathname;
             let elementsToHide = Array.from(optMap.keys()).filter(id => o_result.options.includes(id));
 
             // Left Column Elements
@@ -101,19 +145,14 @@ function showAppropriateDomElements() {
                 if (rightSelectorsToHide.length > 0) {
                     tryHideElements(document.querySelectorAll(rightSelectorsToHide));
                     watchForNewArrivals(rightSelectorsToHide, function(element) {
-                        let oHTML = element['outerHTML'];
-                        if (oHTML.includes('role="search"')) {
-                            goUp(4, element).style.setProperty('display', 'none');
-                            let sib = element.nextSibling;
-                            if (sib) {
-                                sib.style.setProperty('display', 'none');
-                            }
-                        } else if (oHTML.includes('aria-label="Who to follow"')) {
-                            goUp(1, element).style.setProperty('display', 'none');
-                        } else if (oHTML.includes('aria-label="Relevant people"')) {
-                            goUp(1, element).style.setProperty('display', 'none');
-                        } else if (oHTML.includes('aria-label="Footer"')) {
-                            goUp(1, element).style.setProperty('display', 'none');
+                        if (hasAttributeValue(element, 'role', 'search')) {
+                            // search fields
+                            navUpDomTree(4, element).style.setProperty('display', 'none');
+                            safeHideSiblings(p, 1);
+                        } else if (hasAttributeValue(element, 'aria-label', 'Who to follow')
+                                   || hasAttributeValue(element, 'aria-label', 'Relevant people')
+                                   || hasAttributeValue(element, 'aria-label', 'Footer')) {
+                            navUpDomTree(1, element).style.setProperty('display', 'none');
                         } else {
                             element.style.setProperty('display', 'none');
                         }
@@ -121,72 +160,70 @@ function showAppropriateDomElements() {
                 }
             }
 
-            // Main Column Elements
-            let centerSelectorsToHide = elementsToHide.filter(id => Array.from(cMap.keys()).includes(id)).map(id => cMap.get(id)).join(',');
-            if (centerSelectorsToHide.length > 0) {
-                watchForNewArrivals(centerSelectorsToHide, function(element) {
-                    let oHTML = element['outerHTML'];
-                    if (oHTML.includes('data-testid="tweet"')) {
-                        if (elementsToHide.includes('ads') && oHTML.includes('Promoted')) {
-                            let p = goUp(5, element);
-                            p.style.setProperty('display', 'none');
-                            safeHideSiblings(p.parentElement, -1);
-                            safeHideSiblings(p.parentElement, 1);
-                        } else if (elementsToHide.includes('replies') && urlPath.includes('/status/')) {
-                            element.style.setProperty('display', 'none');
-                        } else if (elementsToHide.includes('media') && element.classList.contains('r-9x6qib')) {
-                            element.style.setProperty('display', 'none');
-                        }
-                    } else if (oHTML.includes('data-testid="reply"') || oHTML.includes('data-testid="like"') || oHTML.includes('data-testid="unlike"')
-                               || oHTML.includes('data-testid="retweet"') || oHTML.includes('aria-label="Share Tweet"')) {
-                        element.style.setProperty('display', 'none');
-                    } else if (oHTML.includes('data-testid="UserCell"')) {
-                        element.style.setProperty('display', 'none');
-                        let p = element.parentElement.parentElement;
-                        safeHideSiblings(p, -3);
-                        safeHideSiblings(p, 3);
-                    } else {
-                        if (elementsToHide.includes('tweet_box') && element.className === 'DraftEditor-root') {
-                            let e = goUp(18, element);
-                            e.style.setProperty('display', 'none');
-                            e.nextSibling.style.setProperty('display', 'none');
-                        } else {
-                            element.style.setProperty('display', 'none');
-                        }
-                    }
+            // Primary Column Elements
+            if (elementsToHide.includes('main')) {
+                console.dir('111');
+                tryHideElement(document.querySelector(cMap.get('main')));
+                watchForNewArrivals(cMap.get('main'), function(element) {
+                    element.style.setProperty('display', 'none');
                 });
+            } else {
+                let centerSelectorsToHide = elementsToHide.filter(id => Array.from(cMap.keys()).includes(id)).map(id => cMap.get(id)).join(',');
+                if (centerSelectorsToHide.length > 0) {
+                    watchForNewArrivals(centerSelectorsToHide, function(element) {
+                        if (hasAttributeValue(element, 'href', '/search-advanced')) {
+                            // search bar
+                            navUpDomTree(4, element).setProperty('display', 'none');
+                        } else if (element.classList.contains('DraftEditor-root')) {
+                            // write tweet box
+                            let el = navUpDomTree(18, element);
+                            el.style.setProperty('display', 'none');
+                            el.nextSibling.style.setProperty('display', 'none');
+                        } else if (hasAttributeValue(element, 'aria-label', 'Timeline: Your Home Timeline')) {
+                            // timeline
+                            let el = navUpDomTree(4, element);
+                            el.style.setProperty('display', 'none');
+                            el.previousSibling.style.setProperty('display', 'none');
+                        } else if (hasAttributeValue(element, 'aria-label', 'Reply')) {
+                            // reply button
+                            navUpDomTree(1, element).style.setProperty('display', 'none');
+                        } else if (hasAttributeValues(element, 'data-testid', ['reply', 'like', 'unlike', 'retweet']) || hasAttributeValue(element, 'aria-label', 'Share Tweet')) {
+                            // tweet actions
+                            element.style.setProperty('display', 'none');
+                        } else if (location.pathname.split('/')[2] === 'status' && hasAttributeValue(element, 'aria-label', 'Timeline: Conversation')) {
+                            // replies to a tweet (conversation)
+                            element.classList.add('replies');
+                        // } else if (hasAttributeValue(element, 'role', 'link')) {
+                        //     // media
+                        //     let a = document.createElement('a');
+                        //     a.href = element.href;
+                        //     a.innerHTML = element.href;
+                        //     element.parentNode.replaceChild(a, element);
+                        //     navUpDomTree(2, element).classList.add('no-media-link-padding');
+                        } else if (element.innerHTML === 'Promoted') {
+                            // promotions
+                            if ((location.pathname.split('/')[1] === 'home')) {
+                                let el = navUpDomTree(2, element);
+                                el.style.setProperty('display', 'none');
+                                safeHideSiblings(el, -1);
+                            } else {
+                                let el = navUpDomTree(3, element);
+                                el.style.setProperty('display', 'none');
+                                safeHideSiblings(el, -1);
+                                safeHideSiblings(el, 1);
+                            }
+                        } else if (hasAttributeValue(element, 'data-testid', 'UserCell')) {
+                            // who to follow
+                            element.style.setProperty('display', 'none');
+                            let p = element.parentElement.parentElement;
+                            safeHideSiblings(p, -3);
+                            safeHideSiblings(p, 3);
+                        }
+                    });
+                }
             }
         });
     });
-}
-
-// return the nth parent element
-function goUp(levels, element) {
-    if (levels > 0) {
-        return goUp(levels-1, element.parentElement);
-    }
-    return element;
-}
-
-// hide n sibling elements before (negative number) or after (positive number) an element
-// if one of the siblings is missing (null/undefined), returns without throwing an error
-function safeHideSiblings(element, number_of_siblings) {
-    if (!element || number_of_siblings === 0) {
-        return;
-    }
-    if (number_of_siblings < 0) {
-        let sibling = element.previousSibling;
-        if (sibling) {
-            sibling.style.setProperty('display', 'none');
-            safeHideSiblings(sibling, number_of_siblings+1)
-        }
-    } else {
-        let sibling = element.nextSibling;
-        if (sibling) {
-            sibling.style.setProperty('display', 'none');
-            safeHideSiblings(sibling, number_of_siblings-1)
-        }
-    }
 }
 
 chrome.runtime.onMessage.addListener(function(message, _sender, _sendResponse) {
