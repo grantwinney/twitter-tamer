@@ -148,7 +148,7 @@ function showAppropriateDomElements() {
                         if (hasAttributeValue(element, 'role', 'search')) {
                             // search fields
                             navUpDomTree(4, element).style.setProperty('display', 'none');
-                            safeHideSiblings(p, 1);
+                            safeHideSiblings(element, 1);
                         } else if (hasAttributeValue(element, 'aria-label', 'Who to follow')
                                    || hasAttributeValue(element, 'aria-label', 'Relevant people')
                                    || hasAttributeValue(element, 'aria-label', 'Footer')) {
