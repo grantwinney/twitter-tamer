@@ -201,16 +201,7 @@ function showAppropriateDomElements() {
                         //     navUpDomTree(2, element).classList.add('no-media-link-padding');
                         } else if (element.innerHTML === 'Promoted') {
                             // promotions
-                            if ((location.pathname.split('/')[1] === 'home')) {
-                                let el = navUpDomTree(2, element);
-                                el.style.setProperty('display', 'none');
-                                safeHideSiblings(el, -1);
-                            } else {
-                                let el = navUpDomTree(3, element);
-                                el.style.setProperty('display', 'none');
-                                safeHideSiblings(el, -1);
-                                safeHideSiblings(el, 1);
-                            }
+                            navUpDomTree(9, element).style.setProperty('display', 'none');
                         } else if (hasAttributeValue(element, 'data-testid', 'UserCell')) {
                             // who to follow
                             element.style.setProperty('display', 'none');
