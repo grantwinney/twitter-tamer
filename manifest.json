@@ -5,19 +5,19 @@
 
     "name": "Twitter Tamer",
     "description": "Choose what to hide in Twitter - sidebars (who to follow, trends), notifications, activity (comments, likes) and more!",
-    "version": "2.2.1",
+    "version": "2.3.0",
 
     "options_ui": {
         "page": "options.html"
     },
 
     "permissions": [
-        "activeTab",
         "storage"
     ],
 
     "browser_action": {
         "default_title": "Twitter Tamer",
+        "default_popup": "options.html",
         "default_icon": {
             "16": "images/dft-16.png",
             "32": "images/dft-32.png",
@@ -25,13 +25,6 @@
             "64": "images/dft-64.png",
             "128": "images/dft-128.png"
         }
-    },
-
-    "background": {
-        "scripts": [
-            "js/background.js"
-        ],
-        "persistent": false
     },
 
     "content_scripts": [

@@ -1,14 +1,18 @@
 function loadOptions() {
-    chrome.storage.sync.get('options', function(result) {
+    chrome.storage.sync.get('options', (result) => {
         if (result != undefined && result.options != undefined) {
-            result.options.forEach(function(id) {
+            result.options.forEach((id) => {
                 document.getElementById(id).checked = true;
-                if (id == 'left_banner' || id == 'right_banner' || id == 'main') {
+                if (id === 'left_banner' || id === 'right_banner' || id === 'main') {
                     document.getElementById(`${id}_details`).classList.add('disabled_option');
                 }
             });
         }
     });
+
+    chrome.storage.local.get('extension_enabled', (result) => {
+        document.getElementById('enable').value = (!result || result.extension_enabled) ? "DISABLE" : "ENABLE";
+    });    
 }
 
 function saveOptions() {
@@ -31,20 +35,37 @@ function registerBannerSectionHeaderClick(bannerId) {
 
 function resetOptions() {
     if (chrome.extension.getBackgroundPage().confirm('This will reset the settings for this extension. Are you sure?')) {
-        chrome.storage.sync.clear(function() {
-            location.reload();
-        });
+        chrome.storage.sync.clear(() => { location.reload(); });
     }
 }
 
-window.addEventListener('DOMContentLoaded', function load(event) {
+function toggleActive() {
+    chrome.storage.local.get('extension_enabled', (result) => {
+        let wasEnabled = (!result || result.extension_enabled);
+        if (wasEnabled) {
+            chrome.storage.local.set({'extension_enabled': false}, () => {
+                chrome.browserAction.setIcon({ path: 'images/dft-64-bw.png' });
+                chrome.browserAction.setTitle({ title: chrome.runtime.getManifest().name + ' (disabled)'});
+            });
+        } else {
+            chrome.storage.local.set({'extension_enabled': true}, () => {
+                chrome.browserAction.setIcon({ path: 'images/dft-64.png'});
+                chrome.browserAction.setTitle({ title: '' });
+            });
+        }
+        document.getElementById('enable').value = wasEnabled ? "ENABLE" : "DISABLE";
+    });
+}
+
+window.addEventListener('DOMContentLoaded', (_event) => {
     registerBannerSectionHeaderClick('left_banner');
     registerBannerSectionHeaderClick('right_banner');
     registerBannerSectionHeaderClick('main');
     document.getElementById('version').innerHTML = `&copy; 2017-${new Date().getFullYear()}, ver ${chrome.runtime.getManifest().version}`
-    document.getElementById('options-menu-item').addEventListener('click', function(e) { e.preventDefault(); showPane('options') });
-    document.getElementById('support-menu-item').addEventListener('click', function(e) { e.preventDefault(); showPane('support') });
-    document.getElementById('save').addEventListener('click', function(_e) { saveOptions(); });
-    document.getElementById('reset').addEventListener('click', function(_e) { resetOptions(); });
+    document.getElementById('options-menu-item').addEventListener('click', (e) => { e.preventDefault(); showPane('options') });
+    document.getElementById('support-menu-item').addEventListener('click', (e) => { e.preventDefault(); showPane('support') });
+    document.getElementById('save').addEventListener('click', (_e) => { saveOptions(); });
+    document.getElementById('reset').addEventListener('click', (_e) => { resetOptions(); });
+    document.getElementById('enable').addEventListener('click', (_e) => { toggleActive(); });
     loadOptions();
 });

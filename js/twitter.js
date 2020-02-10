@@ -111,13 +111,13 @@ function showAppropriateDomElements() {
         chrome.storage.sync.get('options', function(o_result) {
 
             // If the extension is "disabled" or nothing's selected to hide, just return
-            if (((ee_result !== undefined && ee_result.extension_enabled !== undefined && !ee_result.extension_enabled)
-                 || o_result === undefined || o_result.options === undefined || o_result.options.length === 0)) {
+            if (((ee_result && !ee_result.extension_enabled)
+                 || !o_result || !o_result.options || o_result.options.length === 0)) {
                 return;
             }
 
             let elementsToHide = Array.from(optMap.keys()).filter(id => o_result.options.includes(id));
-
+                        
             // Left Column Elements
             if (elementsToHide.includes('left_banner')) {
                 tryHideElement(document.querySelector(lMap.get('left_banner')));
@@ -162,7 +162,6 @@ function showAppropriateDomElements() {
 
             // Primary Column Elements
             if (elementsToHide.includes('main')) {
-                console.dir('111');
                 tryHideElement(document.querySelector(cMap.get('main')));
                 watchForNewArrivals(cMap.get('main'), function(element) {
                     element.style.setProperty('display', 'none');
@@ -225,9 +224,15 @@ function showAppropriateDomElements() {
         });
     });
 }
+showAppropriateDomElements();
 
-chrome.runtime.onMessage.addListener(function(message, _sender, _sendResponse) {
-    if (message.event === 'tab_updated') {
-        showAppropriateDomElements();
-    }
-});
+// chrome.storage.local.get('extension_enabled', function(result) {
+//     if (!result || result.extension_enabled) {
+//         showAppropriateDomElements();
+//         // chrome.browserAction.setIcon({ path: 'images/dft-64.png' });
+//         // chrome.browserAction.setTitle({ title: '' });
+//     } else {
+//         // chrome.browserAction.setIcon({ path: 'images/dft-64-bw.png'});
+//         // chrome.browserAction.setTitle({ title: chrome.runtime.getManifest().name + ' (disabled)'});
+//     }
+// });
