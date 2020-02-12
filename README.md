@@ -1,3 +1,5 @@
+> **[NOTE: This extension is no longer available in the Chrome store, thanks to Google's draconian review process](https://grantwinney.com/what-weve-got-here-google-is-failure-to-communicate/).**
+
 # Twitter Tamer - a browser extension
 
 A browser extension to eliminate some of the noise on Twitter. It's available for [Chrome](https://chrome.google.com/webstore/detail/twitter-distraction-remov/aflapchiclhldkgbbahbdionenmhkoed), which means it should work with Brave and Opera too.
