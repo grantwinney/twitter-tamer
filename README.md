@@ -1,4 +1,7 @@
+> ---
 > **[NOTE: This extension is no longer available in the Chrome store, thanks to Google's draconian review process](https://grantwinney.com/what-weve-got-here-google-is-failure-to-communicate/).**
+>
+> ---
 
 # Twitter Tamer - a browser extension
 
