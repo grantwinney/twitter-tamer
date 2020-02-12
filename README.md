@@ -5,7 +5,7 @@
 
 # Twitter Tamer - a browser extension
 
-A browser extension to eliminate some of the noise on Twitter. It's available for [Chrome](https://chrome.google.com/webstore/detail/twitter-distraction-remov/aflapchiclhldkgbbahbdionenmhkoed), which means it should work with Brave and Opera too.
+A browser extension to eliminate some of the noise on Twitter. ~~It's available for [Chrome](https://chrome.google.com/webstore/detail/twitter-distraction-remov/aflapchiclhldkgbbahbdionenmhkoed), which means it should work with Brave and Opera too.~~
 
 ---
 
@@ -22,6 +22,6 @@ When the extension is first installed, nothing is selected, so nothing is hidden
 - Ads _(i.e. those annoying "Promotion" tweets)_
 - ... and more
 
-If you have a question or problem, [open an issue](https://github.com/grantwinney/twitter-tamer/issues) on GitHub.
+~~If you have a question or problem, [open an issue](https://github.com/grantwinney/twitter-tamer/issues) on GitHub.~~
 
 If you have a comment or just want to read about how I wrote this, [check out my blog](https://grantwinney.com/twitter-tamer/).
