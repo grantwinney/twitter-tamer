@@ -1,5 +1,5 @@
 > ---
-> ### [NOTE: This extension is no longer available in the Chrome store, thanks to Google's draconian review process](https://grantwinney.com/what-weve-got-here-google-is-failure-to-communicate/).
+> ### [NOTE: This extension is no longer available in the Chrome store, thanks to Google's draconian review process. Read more here.](https://grantwinney.com/what-weve-got-here-google-is-failure-to-communicate/)
 >
 > ---
 
