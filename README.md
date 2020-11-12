@@ -11,10 +11,6 @@ A browser extension to eliminate some of the noise on Twitter. ~~It's available 
 
 ---
 
-I dumped Twitter awhile ago - it's a blackhole for your free time, so unless you're _really_ disciplined, I suggest you abandon it and find blogs and forums more specialized to your particular interests. For those who can't live without it, this should make it more tolerable. /rant ;)
-
----
-
 When the extension is first installed, nothing is selected, so nothing is hidden. Open the "options" page and choose the elements you'd like to hide, such as:
 
 - Left column items _(i.e. "Notifications" or "Lists")_
